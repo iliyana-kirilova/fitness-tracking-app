@@ -1,0 +1,124 @@
+:root {
+    --bg-color: #0F172A;
+    --card-bg: #1E293B;
+    --accent-color: #CCFF00;
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --border-color: #334155;
+    --error-color: #EF4444;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem; /* Намален падинг за мобилни устройства */
+}
+
+/* По-малък и компактен прозорец */
+.register-card {
+    background-color: rgba(30, 41, 59, 0.7);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem 2rem; /* Свити вътрешни отстояния */
+    border-radius: 16px;
+    width: 100%;
+    max-width: 420px; /* Намалена широчина */
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 0.25rem;
+}
+
+.card-subtitle {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-align: center;
+    margin-bottom: 1.25rem;
+}
+
+.form-group {
+    margin-bottom: 0.85rem; /* Намалено разстояние между полетата */
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+}
+
+label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+}
+
+input, select {
+    width: 100%;
+    background-color: #0F172A;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.6rem; /* По-компактни инпути */
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.error-message {
+    color: var(--error-color);
+    font-size: 0.7rem;
+    margin-top: 0.2rem;
+    font-weight: 600;
+}
+
+.btn-submit {
+    width: 100%;
+    background-color: var(--accent-color);
+    color: #000;
+    border: none;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 0.5rem;
+}
+
+.btn-submit:hover { background-color: #b3ff00; }
+
+.redirect-text {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+}
+
+.redirect-text a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.redirect-text a:hover { text-decoration: underline; }
+

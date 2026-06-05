@@ -1,0 +1,112 @@
+:root {
+    --bg-color: #0F172A;
+    --card-bg: #1E293B;
+    --accent-color: #CCFF00;
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --border-color: #334155;
+    --error-color: #EF4444;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    background-color: rgba(30, 41, 59, 0.7);
+    border: 1px solid var(--border-color);
+    padding: 2.5rem;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 400px;
+    backdrop-filter: blur(10px);
+}
+
+.card-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.card-subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-group { margin-bottom: 1.5rem; }
+
+label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+input {
+    width: 100%;
+    background-color: #0F172A;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem;
+    color: #fff;
+    font-size: 0.95rem;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+input:focus { outline: none; border-color: var(--accent-color); }
+
+.global-error {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--error-color);
+    color: var(--error-color);
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.btn-submit {
+    width: 100%;
+    background-color: var(--accent-color);
+    color: #000;
+    border: none;
+    padding: 0.9rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover { background-color: #b3ff00; }
+
+.redirect-text {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 1.5rem;
+}
+
+.redirect-text a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.redirect-text a:hover { text-decoration: underline; }
