@@ -2,13 +2,17 @@ package app.service.user;
 
 import app.mapper.user.UserMapper;
 import app.models.dto.user.UserDto;
+import app.models.dto.user.UserLoginRequest;
 import app.models.dto.user.UserRegisterRequest;
 import app.models.entity.user.User;
 import app.repository.user.UserRepository;
 import app.service.userProfile.UserProfileService;
+import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -21,6 +25,17 @@ public class UserService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userProfileService = userProfileService;
+    }
+
+    public UserDto login(UserLoginRequest userLoginRequest) {
+        Optional<User> optionalUser = userRepository.findByUsername(userLoginRequest.getUsername());
+
+        if (optionalUser.isEmpty() ||
+        !passwordEncoder.matches(userLoginRequest.getPassword(), optionalUser.get().getPassword())){
+            throw new RuntimeException("Username or password mismatch!");
+        }
+
+        return UserMapper.toUserDto(optionalUser.get());
     }
 
     public UserDto register(UserRegisterRequest userRegisterRequest) {

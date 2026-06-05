@@ -19,5 +19,4 @@ public class UserProfileDto {
     private Integer age;
     private ActivityLevel activityLevel;
     private FitnessGoal goal;
-    private User user;
 }

@@ -17,7 +17,6 @@ public class UserProfileMapper {
                 .age(userProfile.getAge())
                 .activityLevel(userProfile.getActivityLevel())
                 .goal(userProfile.getGoal())
-                .user(userProfile.getUser())
                 .build();
     }
 }
