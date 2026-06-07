@@ -12,46 +12,44 @@
     <h2 class="card-title">Create Account</h2>
     <p class="card-subtitle">Join NutriPulse ecosystem</p>
 
-    <form action="/register" method="POST">
+    <form th:action="@{/register}" th:object="${userRegisterRequest}" th:method="post">
 
         <div class="form-row">
             <div class="form-group">
                 <label>First Name</label>
-                <input type="text" name="firstName" id="firstName">
+                <input type="text" name="firstName" id="firstName" th:field="*{firstName}" required>
             </div>
             <div class="form-group">
                 <label>Last Name</label>
-                <input type="text" name="lastName" id="lastName">
+                <input type="text" name="lastName" id="lastName" th:field="*{lastName}" required>
             </div>
         </div>
 
         <div class="form-group">
             <label>Username</label>
-            <input type="text" name="username" id="username">
+            <input type="text" name="username" id="username" th:field="*{username}" required>
         </div>
 
         <div class="form-group">
             <label>Email</label>
-            <input type="email" name="email" id="email">
+            <input type="email" name="email" id="email" th:field="*{email}" required>
         </div>
 
         <div class="form-group">
             <label>Country</label>
-            <select name="country" id="country">
-                <option value="" disabled selected>Choose country</option>
-                <option value="BULGARIA">BULGARIA</option>
-                <option value="SPAIN">SPAIN</option>
-                <option value="ENGLAND">ENGLAND</option>
-                <option value="ITALY">ITALY</option>
-                <option value="NETHERLANDS">NETHERLANDS</option>
-                <option value="MALTA">MALTA</option>
-                <option value="SWEDEN">SWEDEN</option>
+            <select name="country" id="country" th:field="*{country}">
+
+                <option th:value="${null}">Choose country </option>
+                <option th:each="country : ${countries}"
+                        th:value="${country}"
+                        th:text="${country}">
+                </option>
             </select>
         </div>
 
         <div class="form-group">
             <label>Password</label>
-            <input type="password" name="password" id="password">
+            <input type="password" name="password" id="password" th:field="*{password}" required>
         </div>
 
         <button type="submit" class="btn-submit">Create Account</button>

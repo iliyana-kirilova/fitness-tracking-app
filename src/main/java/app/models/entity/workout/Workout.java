@@ -30,8 +30,4 @@ public class Workout {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "daily_log_id")
     private DailyLog dailyLog;
-
-
-
-
 }

@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriPulse - Home</title>
     <link rel="stylesheet" href="/css/home.css">
+    <script src="/js/home.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 <nav class="nav-logged">
     <div class="nav-brand">NUTRIPULSE.</div>
     <div class="nav-links">
-        <a href="/dashboard" class="link-item">Dashboard</a>
-        <a href="/profile/edit" class="link-item">My Profile Settings</a>
+        <button class="link-item btn-link-style" id="openProfileModalBtn">My Profile Settings</button>
         <a href="/users/logout" class="btn-logout">Logout</a>
     </div>
 </nav>
@@ -29,22 +29,24 @@
     <div class="side-panel">
         <div class="card profile-card">
             <div class="profile-avatar-wrapper">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200&h=200" alt="Profile Picture" class="profile-img">
+                <img th:src="${user.profilePicture}" alt="Profile Picture" class="profile-img">
                 <div class="status-badge"></div>
             </div>
             <div class="profile-info">
-                <h3 class="profile-name">John Doe</h3>
-                <span class="profile-username">@johndoe_legend</span>
+                <h3 class="profile-name"
+                    th:text="|${user.firstName} ${user.lastName}|">
+                </h3>
+                <span class="profile-username" th:text="${user.username}"></span>
             </div>
             <hr class="divider">
             <div class="profile-meta">
                 <div class="meta-item">
                     <span class="meta-label">First Name</span>
-                    <span class="meta-value">John</span>
+                    <span class="meta-value" th:text="${user.getFirstName()}"></span>
                 </div>
                 <div class="meta-item">
                     <span class="meta-label">Last Name</span>
-                    <span class="meta-value">Doe</span>
+                    <span class="meta-value" th:text="${user.getLastName()}"></span>
                 </div>
             </div>
             <a href="/dashboard" class="btn-view-dashboard">Go to Live Dashboard →</a>
@@ -154,5 +156,42 @@
         </div>
     </div>
 </main>
+
+<div class="modal-overlay" id="profileModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>Edit Profile Settings</h3>
+            <button class="close-modal-btn" id="closeProfileModalBtn">✕</button>
+        </div>
+        <form id="profileForm" th:action="@{/users/{id}/profile/edit(id=${user.id})}" th:object="${user}" th:method="put" class="modal-form">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" th:field="*{username}" class="modal-input">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" th:field="*{email}" class="modal-input">
+                </div>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" th:field="*{firstName}" class="modal-input">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" th:field="*{lastName}" class="modal-input">
+                </div>
+                <div class="form-group full-width">
+                    <label for="profilePicture">Profile Picture URL</label>
+                    <input type="url" id="profilePicture" name="profilePicture" th:field="*{profilePicture}" class="modal-input">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" id="cancelProfileBtn">Cancel</button>
+                <button type="submit" class="btn-submit-profile">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>

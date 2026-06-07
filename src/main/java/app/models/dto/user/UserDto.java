@@ -1,5 +1,6 @@
 package app.models.dto.user;
 
+import app.models.dto.dailyLog.DailyLogDto;
 import app.models.entity.dailyLog.DailyLog;
 import app.models.entity.user.Country;
 import app.models.entity.user.UserRole;
@@ -26,5 +27,5 @@ public class UserDto {
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
     private UserProfile userProfile;
-    private List<DailyLog> dailyLogs;
+    private List<DailyLogDto> dailyLogs;
 }

@@ -1,6 +1,9 @@
 package app.web;
 
+import app.models.dto.user.UserDto;
 import app.models.dto.user.UserLoginRequest;
+import app.models.dto.user.UserRegisterRequest;
+import app.models.entity.user.Country;
 import app.service.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,18 +36,34 @@ public class IndexController {
 
     @PostMapping("/login")
     public ModelAndView login(@ModelAttribute UserLoginRequest userLoginRequest) {
-        userService.login(userLoginRequest);
-        return new ModelAndView("redirect:/dashboard");
+        UserDto user = userService.login(userLoginRequest);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("home");
+        modelAndView.addObject("user", user);
+        return modelAndView;
     }
 
     @GetMapping("/register")
-    public String getRegisterPage() {
-        return "register";
+    public ModelAndView getRegisterPage() {
+        UserRegisterRequest userRegisterRequest = UserRegisterRequest.builder().build();
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("register");
+        modelAndView.addObject("userRegisterRequest", userRegisterRequest);
+        modelAndView.addObject("countries", Country.values());
+        return modelAndView;
     }
 
-    @GetMapping("/dashboard")
+    @PostMapping("/register")
+    public ModelAndView register(@ModelAttribute UserRegisterRequest userRegisterRequest) {
+        userService.register(userRegisterRequest);
+        return new ModelAndView("redirect:/login");
+    }
+
+    @GetMapping("/home")
     public ModelAndView getHomePage() {
-        return new ModelAndView("dashboard");
+        return new ModelAndView("home");
     }
 
 }
