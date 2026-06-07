@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriPulse - Dashboard</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="/js/dashboard.js" defer></script>
+</head>
+<body>
+<nav class="nav-logged">
+    <div class="nav-brand">NUTRIPULSE.</div>
+    <div class="nav-links">
+        <a href="/profile/edit" class="link-item">My Profile Settings</a>
+        <a href="/users/logout" class="btn-logout">Logout</a>
+    </div>
+</nav>
+
+<main class="dashboard-container">
+
+    <div class="welcome-section">
+        <div class="welcome-header">
+            <h1>Welcome back, <span class="text-highlight">Legend</span>!</h1>
+            <h2>Are you ready to outwork yesterday?</h2>
+        </div>
+    </div>
+
+    <div class="main-panel">
+
+        <div class="card">
+            <span class="section-title">Today's Energy Balance</span>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-number color-target">2200</span>
+                    <span class="stat-label">Target kcal</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number color-eaten">1450</span>
+                    <span class="stat-label">Consumed</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number color-burned">350</span>
+                    <span class="stat-label">Burned</span>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-labels">
+                    <span>Net Calories Progress</span>
+                    <span>65%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 65%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header-row">
+                <span class="section-title" style="font-size: 1rem; color: #fff;">Meals Log</span>
+                <a href="/meals/add" class="btn-action-sm bg-lime">+ Add Meal</a>
+            </div>
+
+            <div style="margin-top: 1rem;">
+                <div class="log-item">
+                    <div>
+                        <span class="log-item-title">Breakfast</span>
+                        <div class="log-item-sub">P: 30g | C: 40g | F: 10g</div>
+                    </div>
+                    <div class="log-item-right">
+                        <span class="kcal-value">450 kcal</span>
+                        <div class="log-item-actions">
+                            <a href="/meals/edit/1" class="btn-edit" title="Edit meal">✎</a>
+                            <form action="/meals/delete/1" method="POST" style="display:inline;">
+                                <button type="submit" class="btn-delete">✕</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header-row">
+                <span class="section-title" style="font-size: 1rem; color: #fff;">Workouts Log</span>
+                <a href="/workouts/add" class="btn-action-sm bg-cyan">+ Add Workout</a>
+            </div>
+
+            <div style="margin-top: 1rem;">
+                <div class="log-item">
+                    <div>
+                        <span class="log-item-title">Cardio Session</span>
+                        <div class="log-item-sub">45 minutes</div>
+                    </div>
+                    <div class="log-item-right">
+                        <span class="kcal-value" style="color: var(--cyan-color);">- 350 kcal</span>
+                        <div class="log-item-actions">
+                            <a href="/workouts/edit/1" class="btn-edit" title="Edit workout">✎</a>
+                            <form action="/workouts/delete/1" method="POST" style="display:inline;">
+                                <button type="submit" class="btn-delete">✕</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="side-panel">
+
+        <form action="/profile/update-biometrics" method="POST" class="card" id="biometricsForm">
+            <div class="card-header-row">
+                <span class="section-title">Biometrics & Goal</span>
+                <button type="button" class="btn-inline-edit" id="editBioBtn">Edit</button>
+            </div>
+
+            <div class="bio-list">
+                <div class="bio-row">
+                    <span class="text-muted">Goal</span>
+                    <div class="bio-value-wrapper">
+                        <select class="enum-select bio-field" name="goal" disabled>
+                            <option value="MAINTAIN" selected>Maintain</option>
+                            <option value="LOSE_WEIGHT">Lose weight</option>
+                            <option value="GAIN_WEIGHT">Gain weight</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bio-row">
+                    <span class="text-muted">Activity</span>
+                    <div class="bio-value-wrapper">
+                        <select class="enum-select bio-field" name="activity" disabled>
+                            <option value="SEDENTARY">Sedentary</option>
+                            <option value="LIGHTLY_ACTIVE">Lightly active</option>
+                            <option value="MODERATELY_ACTIVE" selected>Moderately active</option>
+                            <option value="VERY_ACTIVE">Very active</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bio-row">
+                    <span class="text-muted">Gender</span>
+                    <div class="bio-value-wrapper">
+                        <select class="enum-select bio-field" name="gender" disabled>
+                            <option value="MALE" selected>Male</option>
+                            <option value="FEMALE">Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bio-row">
+                    <span class="text-muted">Weight</span>
+                    <div class="bio-value-wrapper input-container">
+                        <input type="number" class="water-input bio-input bio-field" name="weight" value="80.5" min="0" step="0.1" disabled>
+                        <span class="bio-unit">kg</span>
+                    </div>
+                </div>
+
+                <div class="bio-row">
+                    <span class="text-muted">Height</span>
+                    <div class="bio-value-wrapper input-container">
+                        <input type="number" class="water-input bio-input bio-field" name="height" value="180" min="0" disabled>
+                        <span class="bio-unit">cm</span>
+                    </div>
+                </div>
+
+                <div class="bio-row">
+                    <span class="text-muted">Age</span>
+                    <div class="bio-value-wrapper input-container">
+                        <input type="number" class="water-input bio-input bio-field" name="age" value="24" min="0" disabled>
+                        <span class="bio-unit">y/o</span>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="card" style="text-align: center;">
+            <span class="section-title">Water Intake</span>
+            <div style="font-size: 2rem; font-weight: 900; color: var(--cyan-color); margin: 0.5rem 0;">1500 ml</div>
+
+            <form action="/log/add-water" method="POST" class="water-form">
+                <input type="number" name="water" placeholder="250" class="water-input" min="0" required>
+                <button type="submit" class="btn-action-sm bg-cyan" style="border:none; cursor:pointer; padding: 0.6rem 1rem;">+ Add</button>
+            </form>
+        </div>
+    </div>
+
+</main>
+</body>
+</html>
