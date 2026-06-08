@@ -1,5 +1,7 @@
 package app.models.dto.dailyLog;
 
+import app.models.dto.meal.MealDto;
+import app.models.dto.workout.WorkoutDto;
 import app.models.entity.meal.Meal;
 import app.models.entity.user.User;
 import app.models.entity.workout.Workout;
@@ -24,6 +26,6 @@ public class DailyLogDto {
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
     private User user;
-    private List<Meal> mealsList; //както UserDto(SmartWallet) -> MealDto
-    private List<Workout> workoutList; //както UserDto(SmartWallet) -> WorkoutDto
+    private List<MealDto> mealsList;
+    private List<WorkoutDto> workoutList;
 }

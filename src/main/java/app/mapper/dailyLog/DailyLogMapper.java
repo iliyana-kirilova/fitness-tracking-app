@@ -1,13 +1,30 @@
 package app.mapper.dailyLog;
 
+import app.mapper.meal.MealMapper;
+import app.mapper.workout.WorkoutMapper;
 import app.models.dto.dailyLog.DailyLogDto;
+import app.models.dto.meal.MealDto;
+import app.models.dto.workout.WorkoutDto;
 import app.models.entity.dailyLog.DailyLog;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+@NoArgsConstructor
 public class DailyLogMapper {
-    public static DailyLogDto  toDailyLogDto(DailyLog dailyLog) {
+    public static DailyLogDto toDailyLogDto (DailyLog dailyLog) {
         if (dailyLog == null) {
             return null;
         }
+
+        List<MealDto> mealsList = dailyLog.getMealsList().stream()
+                .map(MealMapper::toDto)
+                .toList();
+
+        List<WorkoutDto> workoutList = dailyLog.getWorkoutList().stream()
+                .map(WorkoutMapper::toDto)
+                .toList();
 
         return DailyLogDto.builder()
                 .id(dailyLog.getId())
@@ -20,8 +37,28 @@ public class DailyLogMapper {
                 .createdOn(dailyLog.getCreatedOn())
                 .updatedOn(dailyLog.getUpdatedOn())
                 .user(dailyLog.getUser())
-                .mealsList(dailyLog.getMealsList())
-                .workoutList(dailyLog.getWorkoutList())
+                .mealsList(mealsList)
+                .workoutList(workoutList)
+                .build();
+    }
+
+    public static DailyLog toDailyLogEntity(DailyLogDto dailyLogDto) {
+
+        if (dailyLogDto == null) {
+            return null;
+        }
+
+        return DailyLog.builder()
+                .id(dailyLogDto.getId())
+                .logDate(dailyLogDto.getLogDate())
+                .waterIntake(dailyLogDto.getWaterIntake())
+                .caloriesConsumed(dailyLogDto.getCaloriesConsumed())
+                .proteinConsumed(dailyLogDto.getProteinConsumed())
+                .carbsConsumed(dailyLogDto.getCarbsConsumed())
+                .fatsConsumed(dailyLogDto.getFatsConsumed())
+                .createdOn(dailyLogDto.getCreatedOn())
+                .updatedOn(dailyLogDto.getUpdatedOn())
+                .user(dailyLogDto.getUser())
                 .build();
     }
 }
