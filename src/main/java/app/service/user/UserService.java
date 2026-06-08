@@ -8,7 +8,6 @@ import app.models.dto.user.UserRegisterRequest;
 import app.models.entity.user.User;
 import app.repository.user.UserRepository;
 import app.service.userProfile.UserProfileService;
-import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

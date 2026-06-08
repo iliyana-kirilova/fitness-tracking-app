@@ -4,8 +4,11 @@ import app.models.dto.user.UserDto;
 import app.models.dto.user.UserLoginRequest;
 import app.models.dto.user.UserRegisterRequest;
 import app.models.entity.user.Country;
+import app.service.dailyLog.DailyLogService;
 import app.service.user.UserService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +18,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class IndexController {
 
     private final UserService userService;
+    private final DailyLogService dailyLogService;
 
-    public IndexController(UserService userService) {
+    public IndexController(UserService userService, DailyLogService dailyLogService) {
         this.userService = userService;
+        this.dailyLogService = dailyLogService;
     }
 
     @GetMapping("/")
@@ -35,7 +40,14 @@ public class IndexController {
     }
 
     @PostMapping("/login")
-    public ModelAndView login(@ModelAttribute UserLoginRequest userLoginRequest) {
+    public ModelAndView login(@Valid @ModelAttribute UserLoginRequest userLoginRequest,
+                             BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("login");
+            return modelAndView;
+        }
+
         UserDto user = userService.login(userLoginRequest);
 
         ModelAndView modelAndView = new ModelAndView();
@@ -56,14 +68,29 @@ public class IndexController {
     }
 
     @PostMapping("/register")
-    public ModelAndView register(@ModelAttribute UserRegisterRequest userRegisterRequest) {
+    public ModelAndView register(@Valid @ModelAttribute UserRegisterRequest userRegisterRequest,
+                                 BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("register");
+            return modelAndView;
+        }
+
         userService.register(userRegisterRequest);
         return new ModelAndView("redirect:/login");
     }
 
     @GetMapping("/home")
     public ModelAndView getHomePage() {
-        return new ModelAndView("home");
+        //this method is for testing purposes only, to be removed in the future
+        //it returns the home page with a hardcoded user, to be used for testing the home page and its features without the need to login first
+        UserDto user = userService.getById("da56da89-db1e-4731-80c1-2650ac93da00");
+
+        ModelAndView modelAndView = new ModelAndView("home");
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("logs", dailyLogService.getAllLogs());
+
+        return modelAndView;
     }
 
 }
