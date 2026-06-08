@@ -39,6 +39,7 @@ public class UserMapper {
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .profilePicture(user.getProfilePicture())
                 .country(user.getCountry())
                 .role(user.getRole())
                 .createdOn(user.getCreatedOn())

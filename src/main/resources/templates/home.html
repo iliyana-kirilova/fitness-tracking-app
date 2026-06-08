@@ -12,7 +12,7 @@
 <nav class="nav-logged">
     <div class="nav-brand">NUTRIPULSE.</div>
     <div class="nav-links">
-        <button class="link-item btn-link-style" id="openProfileModalBtn">My Profile Settings</button>
+        <a th:href="@{/users/{id}/profile(id=${user.getId()})}" class="link-item">My Profile Settings</a>
         <a href="/users/logout" class="btn-logout">Logout</a>
     </div>
 </nav>
@@ -29,14 +29,14 @@
     <div class="side-panel">
         <div class="card profile-card">
             <div class="profile-avatar-wrapper">
-                <img th:src="${user.profilePicture}" alt="Profile Picture" class="profile-img">
+                <img th:src="${user.getProfilePicture()}" alt="Profile Picture" class="profile-img">
                 <div class="status-badge"></div>
             </div>
             <div class="profile-info">
                 <h3 class="profile-name"
-                    th:text="|${user.firstName} ${user.lastName}|">
+                    th:text="|${user.getFirstName()} ${user.getLastName()}|">
                 </h3>
-                <span class="profile-username" th:text="${user.username}"></span>
+                <span class="profile-username" th:text="${user.getUsername()}"></span>
             </div>
             <hr class="divider">
             <div class="profile-meta">
@@ -156,42 +156,5 @@
         </div>
     </div>
 </main>
-
-<div class="modal-overlay" id="profileModal">
-    <div class="modal-card">
-        <div class="modal-header">
-            <h3>Edit Profile Settings</h3>
-            <button class="close-modal-btn" id="closeProfileModalBtn">✕</button>
-        </div>
-        <form id="profileForm" th:action="@{/users/{id}/profile/edit(id=${user.id})}" th:object="${user}" th:method="put" class="modal-form">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" th:field="*{username}" class="modal-input">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" th:field="*{email}" class="modal-input">
-                </div>
-                <div class="form-group">
-                    <label for="firstName">First Name</label>
-                    <input type="text" id="firstName" name="firstName" th:field="*{firstName}" class="modal-input">
-                </div>
-                <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" id="lastName" name="lastName" th:field="*{lastName}" class="modal-input">
-                </div>
-                <div class="form-group full-width">
-                    <label for="profilePicture">Profile Picture URL</label>
-                    <input type="url" id="profilePicture" name="profilePicture" th:field="*{profilePicture}" class="modal-input">
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn-cancel" id="cancelProfileBtn">Cancel</button>
-                <button type="submit" class="btn-submit-profile">Save Changes</button>
-            </div>
-        </form>
-    </div>
-</div>
 </body>
 </html>

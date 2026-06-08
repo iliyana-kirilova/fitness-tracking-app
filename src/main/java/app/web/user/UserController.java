@@ -17,8 +17,18 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/{id}/profile")
+    public ModelAndView profile(@PathVariable  String id) {
+        UserDto user = userService.getById(id);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("profile-edit");
+        modelAndView.addObject("user", user);
+
+        return modelAndView;
+    }
+
     @PutMapping("/{id}/profile/edit")
-    public ModelAndView profile(@PathVariable String id, UserEditDto userEditDto) {
+    public ModelAndView profile(@PathVariable String id, @ModelAttribute UserEditDto userEditDto) {
         UserDto updatedUser = userService.update(id, userEditDto);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("home");
