@@ -3,23 +3,41 @@ package app.service.dailyLog;
 import app.mapper.dailyLog.DailyLogMapper;
 import app.models.dto.dailyLog.DailyLogDto;
 import app.models.entity.dailyLog.DailyLog;
+import app.models.entity.user.User;
 import app.repository.dailyLog.DailyLogRepository;
+import app.repository.user.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class DailyLogService {
 
     private final DailyLogRepository dailyLogRepository;
+    private final UserRepository userRepository;
 
-    public DailyLogService(DailyLogRepository dailyLogRepository) {
+    public DailyLogService(DailyLogRepository dailyLogRepository, UserRepository userRepository) {
         this.dailyLogRepository = dailyLogRepository;
+        this.userRepository = userRepository;
     }
 
-    public DailyLogDto createEmptyLog() {
+    public DailyLogDto createEmptyLog(String id) {
+        UUID  uuid = UUID.fromString(id);
+
+        Optional<DailyLog> existingDailyLog =
+                dailyLogRepository.findByUser_IdAndLogDate(uuid, LocalDate.now());;
+
+        if (existingDailyLog.isPresent()) {
+            return DailyLogMapper.toDailyLogDto(existingDailyLog.get());
+        }
+
+
+        User user = userRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
 
         DailyLog emptyLog = DailyLog.builder()
                 .logDate(LocalDate.now())
@@ -28,6 +46,7 @@ public class DailyLogService {
                 .proteinConsumed(0.0)
                 .carbsConsumed(0.0)
                 .fatsConsumed(0.0)
+                .user(user)
                 .build();
 
         DailyLog savedLog = dailyLogRepository.save(emptyLog);
@@ -37,7 +56,7 @@ public class DailyLogService {
 
     public List<DailyLogDto> getAllLogs() {
 
-        return dailyLogRepository.findAll()
+        return dailyLogRepository.findAllByOrderByLogDateDesc()
                 .stream()
                 .map(DailyLogMapper::toDailyLogDto)
                 .toList();
@@ -54,18 +73,18 @@ public class DailyLogService {
         return DailyLogMapper.toDailyLogDto(dailyLog);
     }
 
-
-    public DailyLogDto saveLog(DailyLogDto dailyLogDto) {
-        DailyLog entity = DailyLogMapper.toDailyLogEntity(dailyLogDto);
-
-        DailyLog savedEntity = dailyLogRepository.save(entity);
-        return DailyLogMapper.toDailyLogDto(savedEntity);
-    }
-
-
     public void deleteLog(String id) {
         dailyLogRepository.deleteById(
                 UUID.fromString(id)
         );
     }
+
+    public DailyLogDto getTodayLog(String id) {
+
+        return dailyLogRepository.findByUser_IdAndLogDate(UUID.fromString(id), LocalDate.now())
+                .map(DailyLogMapper::toDailyLogDto)
+                .orElse(null);
+    }
+
+
 }

@@ -1,13 +1,15 @@
 package app.web.dailyLog;
 
 import app.models.dto.dailyLog.DailyLogDto;
+import app.models.dto.user.UserDto;
+import app.models.entity.user.User;
+import app.repository.user.UserRepository;
 import app.service.dailyLog.DailyLogService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/daily-log")
@@ -21,8 +23,8 @@ public class DailyLogController {
 
     @GetMapping("/create")
     public String createLog() {
-
-        dailyLogService.createEmptyLog();
+        String userId = "da56da89-db1e-4731-80c1-2650ac93da00";
+        dailyLogService.createEmptyLog(userId);
 
         return "redirect:/home";
     }
@@ -38,6 +40,12 @@ public class DailyLogController {
         modelAndView.setViewName("dashboard");
         modelAndView.addObject("dailyLog", dailyLog);
         return modelAndView;
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteLog(@PathVariable String id) {
+        dailyLogService.deleteLog(id);
+        return "redirect:/home";
     }
 
 }

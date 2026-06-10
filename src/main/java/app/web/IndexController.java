@@ -4,6 +4,7 @@ import app.models.dto.user.UserDto;
 import app.models.dto.user.UserLoginRequest;
 import app.models.dto.user.UserRegisterRequest;
 import app.models.entity.user.Country;
+import app.models.entity.user.User;
 import app.service.dailyLog.DailyLogService;
 import app.service.user.UserService;
 import jakarta.validation.Valid;
@@ -84,11 +85,15 @@ public class IndexController {
     public ModelAndView getHomePage() {
         //this method is for testing purposes only, to be removed in the future
         //it returns the home page with a hardcoded user, to be used for testing the home page and its features without the need to login first
-        UserDto user = userService.getById("da56da89-db1e-4731-80c1-2650ac93da00");
+        String userId = "da56da89-db1e-4731-80c1-2650ac93da00";
+
+        UserDto user = userService.getById(userId);
+
 
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("user", user);
         modelAndView.addObject("logs", dailyLogService.getAllLogs());
+        modelAndView.addObject("todayLog", dailyLogService.getTodayLog(userId));
 
         return modelAndView;
     }

@@ -18,13 +18,18 @@ public class DailyLogMapper {
             return null;
         }
 
-        List<MealDto> mealsList = dailyLog.getMealsList().stream()
+        List<MealDto> mealsList =
+                dailyLog.getMealsList() ==null?
+                        List.of():
+                        dailyLog.getMealsList().stream()
                 .map(MealMapper::toDto)
                 .toList();
 
-        List<WorkoutDto> workoutList = dailyLog.getWorkoutList().stream()
-                .map(WorkoutMapper::toDto)
-                .toList();
+        List<WorkoutDto> workoutList = dailyLog.getWorkoutList() == null ?
+                List.of() :
+                dailyLog.getWorkoutList().stream()
+                        .map(WorkoutMapper::toDto)
+                        .toList();
 
         return DailyLogDto.builder()
                 .id(dailyLog.getId())
