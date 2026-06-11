@@ -1,11 +1,15 @@
 package app.service.dailyLog;
 
 import app.mapper.dailyLog.DailyLogMapper;
+import app.mapper.userProfile.UserProfileMapper;
 import app.models.dto.dailyLog.DailyLogDto;
+import app.models.dto.workout.WorkoutDto;
 import app.models.entity.dailyLog.DailyLog;
 import app.models.entity.user.User;
 import app.repository.dailyLog.DailyLogRepository;
 import app.repository.user.UserRepository;
+import app.repository.userProfile.UserProfileRepository;
+import app.service.CaloriesCalculatorService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,10 +22,14 @@ public class DailyLogService {
 
     private final DailyLogRepository dailyLogRepository;
     private final UserRepository userRepository;
+    private final UserProfileRepository userProfileRepository;
+    private final CaloriesCalculatorService calculatorService;
 
-    public DailyLogService(DailyLogRepository dailyLogRepository, UserRepository userRepository) {
+    public DailyLogService(DailyLogRepository dailyLogRepository, UserRepository userRepository, UserProfileRepository userProfileRepository, CaloriesCalculatorService calculatorService) {
         this.dailyLogRepository = dailyLogRepository;
         this.userRepository = userRepository;
+        this.userProfileRepository = userProfileRepository;
+        this.calculatorService = calculatorService;
     }
 
     public DailyLogDto createEmptyLog(String id) {
@@ -70,7 +78,23 @@ public class DailyLogService {
                         new RuntimeException(
                                 "Daily log not found with id: " + id));
 
-        return DailyLogMapper.toDailyLogDto(dailyLog);
+        DailyLogDto dto = DailyLogMapper.toDailyLogDto(dailyLog);
+
+        //caloriesBurned -> workout sum
+        int burned = dto.getWorkoutList().stream()
+                .mapToInt(WorkoutDto::getCaloriesBurned).sum();
+
+        dto.setCaloriesBurned(burned);
+
+        int targetCalories = userProfileRepository
+                .findByUserId(dailyLog.getUser().getId())
+                .map(profile -> calculatorService.calculateTargetCalories(
+                        UserProfileMapper.toDto(profile)))
+                .orElse(0);
+
+        dto.setTargetCalories(targetCalories);
+
+        return dto;
     }
 
     public void deleteLog(String id) {

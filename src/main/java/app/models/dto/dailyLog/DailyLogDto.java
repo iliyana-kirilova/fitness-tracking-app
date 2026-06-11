@@ -20,12 +20,12 @@ public class DailyLogDto {
     private LocalDate logDate;
     private Integer waterIntake;
     private Integer caloriesConsumed;
+    private Integer caloriesBurned;
+    private Integer targetCalories;
     private Double proteinConsumed;
     private Double carbsConsumed;
     private Double fatsConsumed;
-    private LocalDateTime createdOn;
-    private LocalDateTime updatedOn;
-    private User user;
+    private UUID userId;
     private List<MealDto> mealsList;
     private List<WorkoutDto> workoutList;
 }
