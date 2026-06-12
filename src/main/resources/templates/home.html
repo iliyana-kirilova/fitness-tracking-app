@@ -86,26 +86,52 @@
                             <div class="main-stats">
                                 <div class="mini-stat">
                                     <span class="mini-label">Calories</span>
-                                    <span class="mini-value color-eaten"  th:text="${log.caloriesConsumed}"> <small>kcal</small></span>
+                                    <span class="mini-value color-eaten"  th:text="${log.caloriesConsumed} + ' kcal'">0 kcal</span>
                                 </div>
                                 <div class="mini-stat">
                                     <span class="mini-label">Water Intake</span>
-                                    <span class="mini-value color-cyan" th:text="${log.waterIntake}"> <small>ml</small></span>
+                                    <span class="mini-value color-cyan" th:text="${log.waterIntake} + ' ml'">0 ml</span>
                                 </div>
                             </div>
 
                             <div class="macros-strip">
                                 <div class="macro-bar-item">
-                                    <div class="macro-labels"><span>Protein</span><span></span></div>
-                                    <div class="macro-progress-bg" th:text="${log.proteinConsumed}"><div class="macro-progress-fill p-bg" style="width: 85%;"></div></div>
+                                    <div class="macro-labels">
+                                        <span>Protein</span>
+                                        <span th:text="${log.proteinConsumed} + 'g'">0g</span>
+                                    </div>
+                                    <div class="macro-progress-bg">
+                                        <div class="macro-progress-fill p-bg"
+                                             th:style="'width: ' + ${log.targetProtein != null and log.targetProtein > 0 ?
+                                                            (log.proteinConsumed * 100 / log.targetProtein > 100 ? 100 :
+                                                            log.proteinConsumed * 100 / log.targetProtein) : 0} + '%;'">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="macro-bar-item">
-                                    <div class="macro-labels"><span>Carbs</span><span></span></div>
-                                    <div class="macro-progress-bg" th:text="${log.carbsConsumed}"><div class="macro-progress-fill c-bg" style="width: 65%;"></div></div>
+                                    <div class="macro-labels">
+                                        <span>Carbs</span>
+                                        <span th:text="${log.carbsConsumed} + 'g'">0g</span>
+                                    </div>
+                                    <div class="macro-progress-bg">
+                                        <div class="macro-progress-fill c-bg"
+                                             th:style="'width: ' + ${log.targetCarbs != null and log.targetCarbs > 0 ?
+                                                    (log.carbsConsumed * 100 / log.targetCarbs > 100 ? 100 :
+                                                    log.carbsConsumed * 100 / log.targetCarbs) : 0} + '%;'">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="macro-bar-item">
-                                    <div class="macro-labels"><span>Fats</span><span></span></div>
-                                    <div class="macro-progress-bg" th:text="${log.fatsConsumed}"><div class="macro-progress-fill f-bg" style="width: 70%;"></div></div>
+                                    <div class="macro-labels"><span>Fats</span>
+                                        <span th:text="${log.fatsConsumed} + 'g'">0g</span>
+                                    </div>
+                                    <div class="macro-progress-bg">
+                                        <div class="macro-progress-fill f-bg"
+                                             th:style="'width: ' + ${log.targetFats != null and log.targetFats > 0 ?
+                                                        (log.fatsConsumed * 100 / log.targetFats > 100 ? 100 :
+                                                        log.fatsConsumed * 100 / log.targetFats) : 0} + '%;'">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
