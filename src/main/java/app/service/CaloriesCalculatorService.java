@@ -54,4 +54,17 @@ public class CaloriesCalculatorService {
     public int calculateTargetWater(UserProfileDto userProfileDto) {
         return (int) Math.round(userProfileDto.getWeight() * 35);
     }
+
+    public int calculateTargetProtein(int targetCalories) {
+        return (int) Math.round((targetCalories * 0.30) / 4);
+    }
+
+    public int calculateTargetCarbs(int targetCalories) {
+
+        return (int) Math.round((targetCalories * 0.40) / 4);
+    }
+
+    public int calculateTargetFats(int targetCalories) {
+        return (int) Math.round((targetCalories * 0.30) / 9);
+    }
 }
