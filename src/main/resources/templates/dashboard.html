@@ -32,47 +32,65 @@
             <span class="section-title">Today's Energy Balance</span>
             <div class="stats-grid">
                 <div class="stat-box">
-                    <span class="stat-number color-target">2200</span>
+                    <span class="stat-number color-target"
+                          th:text="${dailyLog.targetCalories != null ? dailyLog.targetCalories : 0}">0</span>
                     <span class="stat-label">Target kcal</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-number color-eaten">1450</span>
+                    <span class="stat-number color-eaten"
+                          th:text="${dailyLog.caloriesConsumed}">0</span>
                     <span class="stat-label">Consumed</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-number color-burned">350</span>
+                    <span class="stat-number color-burned"
+                          th:text="${dailyLog.caloriesBurned != null ? dailyLog.caloriesBurned : 0}">0</span>
                     <span class="stat-label">Burned</span>
                 </div>
             </div>
 
-            <div class="progress-container">
+            <div class="progress-container"
+                 th:if="${dailyLog.targetCalories != null and dailyLog.targetCalories > 0}">
                 <div class="progress-labels">
                     <span>Net Calories Progress</span>
-                    <span>65%</span>
+                    <span
+                            th:text="${dailyLog.caloriesProgress} + '%'">0%</span>
                 </div>
                 <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" style="width: 65%;"></div>
+                    <div class="progress-bar-fill"
+                         th:style="'width: ' + ${dailyLog.caloriesProgress} + '%;'"></div>
                 </div>
             </div>
+        </div>
+
+        <div th:if="${dailyLog.targetCalories == 0}"
+             style="margin-top: 1rem; color: var(--text-muted); font-size: 0.85rem;">
+            Fill in your biometrics to see your target calories.
         </div>
 
         <div class="card">
             <div class="card-header-row">
                 <span class="section-title" style="font-size: 1rem; color: #fff;">Meals Log</span>
-                <a href="/meals/add" class="btn-action-sm bg-lime">+ Add Meal</a>
+                <a th:href="@{/meals/add(logId=${dailyLog.id})}"  class="btn-action-sm bg-lime">+ Add Meal</a>
             </div>
 
             <div style="margin-top: 1rem;">
-                <div class="log-item">
+                <p th:if="${#lists.isEmpty(dailyLog.mealsList)}"
+                   style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 1rem 0;">
+                    No meals logged yet.
+                </p>
+                <div class="log-item" th:each="meal : ${dailyLog.mealsList}">
                     <div>
-                        <span class="log-item-title">Breakfast</span>
-                        <div class="log-item-sub">P: 30g | C: 40g | F: 10g</div>
+                        <span class="log-item-title" th:text="${meal.name}"></span>
+                        <div class="log-item-sub"
+                             th:text="'|P: ' + ${meal.protein} + 'g | C: ' + ${meal.carbs} + 'g | F: ' + ${meal.fats} + 'g'"></div>
                     </div>
                     <div class="log-item-right">
-                        <span class="kcal-value">450 kcal</span>
+                        <span class="kcal-value" th:text="${meal.calories} + ' kcal'"></span>
                         <div class="log-item-actions">
-                            <a href="/meals/edit/1" class="btn-edit" title="Edit meal">✎</a>
-                            <form action="/meals/delete/1" method="POST" style="display:inline;">
+                            <a th:href="@{/meals/edit/{id}(id=${meal.id})}" class="btn-edit" title="Edit meal">✎</a>
+                            <form th:action="@{/meals/delete/{id}(id=${meal.id})}"
+                                  th:method="delete"
+                                  onsubmit="return confirm('Delete this meal?');" style="display:inline;">
                                 <button type="submit" class="btn-delete">✕</button>
                             </form>
                         </div>
@@ -84,20 +102,27 @@
         <div class="card">
             <div class="card-header-row">
                 <span class="section-title" style="font-size: 1rem; color: #fff;">Workouts Log</span>
-                <a href="/workouts/add" class="btn-action-sm bg-cyan">+ Add Workout</a>
+                <a th:href="@{/workouts/add(logId=${dailyLog.id})}" class="btn-action-sm bg-cyan">+ Add Workout</a>
             </div>
 
             <div style="margin-top: 1rem;">
-                <div class="log-item">
+                <p th:if="${#lists.isEmpty(dailyLog.workoutList)}"
+                   style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 1rem 0;">
+                    No workouts logged yet.
+                </p>
+                <div class="log-item" th:each="workout : ${dailyLog.workoutList}">
                     <div>
-                        <span class="log-item-title">Cardio Session</span>
-                        <div class="log-item-sub">45 minutes</div>
+                        <span class="log-item-title" th:text="${workout.type}"></span>
+                        <div class="log-item-sub" th:text="${workout.duration} + ' minutes'"></div>
                     </div>
                     <div class="log-item-right">
-                        <span class="kcal-value" style="color: var(--cyan-color);">- 350 kcal</span>
+                        <span class="kcal-value" style="color: var(--cyan-color);"
+                              th:text="'- ' + ${workout.caloriesBurned} + ' kcal'"></span>
                         <div class="log-item-actions">
-                            <a href="/workouts/edit/1" class="btn-edit" title="Edit workout">✎</a>
-                            <form action="/workouts/delete/1" method="POST" style="display:inline;">
+                            <a th:href="@{/workouts/edit/{id}(id=${workout.id})}" class="btn-edit" title="Edit workout">✎</a>
+                            <form th:action="@{/workouts/delete/{id}(id=${workout.id})}"
+                                  th:method="delete"
+                                  onsubmit="return confirm('Delete this workout?');" style="display:inline;">
                                 <button type="submit" class="btn-delete">✕</button>
                             </form>
                         </div>
@@ -110,7 +135,7 @@
 
     <div class="side-panel">
 
-        <form action="/profile/update-biometrics" method="POST" class="card" id="biometricsForm">
+        <form th:action="@{/profile/biometrics/save}" method="POST" th:object="${profileRequest}" class="card" id="biometricsForm">
             <div class="card-header-row">
                 <span class="section-title">Biometrics & Goal</span>
                 <button type="button" class="btn-inline-edit" id="editBioBtn">Edit</button>
@@ -121,9 +146,11 @@
                     <span class="text-muted">Goal</span>
                     <div class="bio-value-wrapper">
                         <select class="enum-select bio-field" name="goal" disabled>
-                            <option value="MAINTAIN" selected>Maintain</option>
-                            <option value="LOSE_WEIGHT">Lose weight</option>
-                            <option value="GAIN_WEIGHT">Gain weight</option>
+                            <option th:each="g : ${goals}"
+                                    th:value="${g}"
+                                    th:text="${g}"
+                                    th:selected="${profile != null and profile.goal == g}">
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -131,11 +158,12 @@
                 <div class="bio-row">
                     <span class="text-muted">Activity</span>
                     <div class="bio-value-wrapper">
-                        <select class="enum-select bio-field" name="activity" disabled>
-                            <option value="SEDENTARY">Sedentary</option>
-                            <option value="LIGHTLY_ACTIVE">Lightly active</option>
-                            <option value="MODERATELY_ACTIVE" selected>Moderately active</option>
-                            <option value="VERY_ACTIVE">Very active</option>
+                        <select class="enum-select bio-field" name="activityLevel" disabled>
+                            <option th:each="a : ${activityLevels}"
+                                    th:value="${a}"
+                                    th:text="${a}"
+                                    th:selected="${profile != null and profile.activityLevel == a}">
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -144,8 +172,11 @@
                     <span class="text-muted">Gender</span>
                     <div class="bio-value-wrapper">
                         <select class="enum-select bio-field" name="gender" disabled>
-                            <option value="MALE" selected>Male</option>
-                            <option value="FEMALE">Female</option>
+                            <option th:each="g : ${genders}"
+                                    th:value="${g}"
+                                    th:text="${g}"
+                                    th:selected="${profile != null and profile.gender == g}">
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -153,7 +184,8 @@
                 <div class="bio-row">
                     <span class="text-muted">Weight</span>
                     <div class="bio-value-wrapper input-container">
-                        <input type="number" class="water-input bio-input bio-field" name="weight" value="80.5" min="0" step="0.1" disabled>
+                        <input type="number" class="water-input bio-input bio-field" name="weight" min="0" step="0.1"
+                               th:value="${profile != null ? profile.weight : ''}" disabled>
                         <span class="bio-unit">kg</span>
                     </div>
                 </div>
@@ -161,7 +193,8 @@
                 <div class="bio-row">
                     <span class="text-muted">Height</span>
                     <div class="bio-value-wrapper input-container">
-                        <input type="number" class="water-input bio-input bio-field" name="height" value="180" min="0" disabled>
+                        <input type="number" class="water-input bio-input bio-field" name="height" min="0"
+                               th:value="${profile != null ? profile.height : ''}" disabled>
                         <span class="bio-unit">cm</span>
                     </div>
                 </div>
@@ -169,7 +202,8 @@
                 <div class="bio-row">
                     <span class="text-muted">Age</span>
                     <div class="bio-value-wrapper input-container">
-                        <input type="number" class="water-input bio-input bio-field" name="age" value="24" min="0" disabled>
+                        <input type="number" class="water-input bio-input bio-field" name="age" min="0"
+                               th:value="${profile != null ? profile.age : ''}" disabled>
                         <span class="bio-unit">y/o</span>
                     </div>
                 </div>
@@ -178,10 +212,13 @@
 
         <div class="card" style="text-align: center;">
             <span class="section-title">Water Intake</span>
-            <div style="font-size: 2rem; font-weight: 900; color: var(--cyan-color); margin: 0.5rem 0;">1500 ml</div>
+            <div style="font-size: 2rem; font-weight: 900; color: var(--cyan-color); margin: 0.5rem 0;"
+                 th:text="${dailyLog.waterIntake + ' ml'}">0 ml</div>
 
-            <form action="/log/add-water" method="POST" class="water-form">
-                <input type="number" name="water" placeholder="250" class="water-input" min="0" required>
+            <form th:action="@{/daily-log/{id}/water(id=${dailyLog.id})}"
+                  th:object="${waterRequest}" method="POST" class="water-form">
+                <input type="number" th:field="*{amount}" placeholder="e.g. 250" class="water-input" min="50" required>
+                <p class="error-msg" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></p>
                 <button type="submit" class="btn-action-sm bg-cyan" style="border:none; cursor:pointer; padding: 0.6rem 1rem;">+ Add</button>
             </form>
         </div>

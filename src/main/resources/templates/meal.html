@@ -20,51 +20,62 @@
 <main class="form-container">
     <div class="card">
         <div class="card-header-row" style="margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
-            <span class="section-title" style="font-size: 1.2rem; color: #fff;">Log New Meal</span>
+            <span class="section-title" style="font-size: 1.2rem; color: #fff;"
+                  th:text="${editMode} ? 'Edit Meal' : 'Log New Meal'">Log New Meal</span>
         </div>
 
-        <form action="/meals/add" method="POST">
+        <form th:action="${editMode} ? '/meals/edit/' + ${mealId} : '/meals/add?logId=' + ${logId}"
+              method="POST"
+              th:object="${mealRequest}">
+            <input th:if="${editMode}" type="hidden" name="_method" value="PUT">
+
             <div class="form-group">
                 <label for="name">Meal Name</label>
-                <input type="text" id="name" name="name" class="form-control" placeholder="e.g., Grilled Chicken Rice" required>
+                <input th:field="*{name}"  type="text" id="name" name="name" class="form-control" placeholder="e.g., Grilled Chicken Rice" required>
             </div>
 
             <div class="form-group">
                 <label for="type">Meal Type</label>
-                <select id="type" name="type" class="form-control" required>
-                    <option value="" disabled selected>Select type...</option>
-                    <option value="BREAKFAST">Breakfast</option>
-                    <option value="LUNCH">Lunch</option>
-                    <option value="DINNER">Dinner</option>
-                    <option value="SNACK">Snack</option>
+                <select th:field="*{type}"  id="type" name="type" class="form-control" required>
+                    <option value="" disabled>Select type...</option>
+                    <option th:each="t : ${mealTypes}"
+                            th:value="${t}"
+                            th:text="${t}">
+                    </option>
                 </select>
+                <p class="error-msg" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></p>
             </div>
 
             <div class="form-group">
                 <label for="calories">Calories (kcal)</label>
-                <input type="number" id="calories" name="calories" class="form-control" placeholder="e.g., 550" min="0" required>
+                <input th:field="*{calories}" type="number" id="calories" name="calories" class="form-control" placeholder="e.g., 550" min="0" required>
+                <p class="error-msg" th:if="${#fields.hasErrors('calories')}" th:errors="*{calories}"></p>
             </div>
 
             <div class="macro-grid">
                 <div class="form-group">
                     <label for="protein">Protein (g)</label>
-                    <input type="number" id="protein" name="protein" class="form-control" placeholder="0.0" min="0" step="0.1" required>
+                    <input  th:field="*{protein}" type="number" id="protein" name="protein" class="form-control" placeholder="0.0" min="0" step="0.1" required>
+                    <p class="error-msg" th:if="${#fields.hasErrors('protein')}" th:errors="*{protein}"></p>
                 </div>
 
                 <div class="form-group">
                     <label for="carbs">Carbs (g)</label>
-                    <input type="number" id="carbs" name="carbs" class="form-control" placeholder="0.0" min="0" step="0.1" required>
+                    <input th:field="*{carbs}" type="number" id="carbs" name="carbs" class="form-control" placeholder="0.0" min="0" step="0.1" required>
+                    <p class="error-msg" th:if="${#fields.hasErrors('carbs')}" th:errors="*{carbs}"></p>
+
                 </div>
 
                 <div class="form-group">
                     <label for="fats">Fats (g)</label>
-                    <input type="number" id="fats" name="fats" class="form-control" placeholder="0.0" min="0" step="0.1" required>
+                    <input th:field="*{fats}" type="number" id="fats" name="fats" class="form-control" placeholder="0.0" min="0" step="0.1" required>
+                    <p class="error-msg" th:if="${#fields.hasErrors('fats')}" th:errors="*{fats}"></p>
                 </div>
             </div>
 
             <div class="form-actions">
-                <a href="/dashboard" class="btn-cancel">Cancel</a>
-                <button type="submit" class="btn-submit bg-lime">Save Meal</button>
+                <a th:href="@{/daily-log/{id}(id=${logId})}" class="btn-cancel">Cancel</a>
+                <button type="submit" class="btn-submit bg-lime" th:text="${editMode} ? 'Update Meal' : 'Save Meal'">Save Meal</button>
             </div>
         </form>
     </div>
