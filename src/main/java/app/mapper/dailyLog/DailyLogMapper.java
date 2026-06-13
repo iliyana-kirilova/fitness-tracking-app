@@ -39,31 +39,9 @@ public class DailyLogMapper {
                 .proteinConsumed(dailyLog.getProteinConsumed())
                 .carbsConsumed(dailyLog.getCarbsConsumed())
                 .fatsConsumed(dailyLog.getFatsConsumed())
-                .createdOn(dailyLog.getCreatedOn())
-                .updatedOn(dailyLog.getUpdatedOn())
-                .user(dailyLog.getUser())
+                .userId(dailyLog.getUser().getId())
                 .mealsList(mealsList)
                 .workoutList(workoutList)
-                .build();
-    }
-
-    public static DailyLog toDailyLogEntity(DailyLogDto dailyLogDto) {
-
-        if (dailyLogDto == null) {
-            return null;
-        }
-
-        return DailyLog.builder()
-                .id(dailyLogDto.getId())
-                .logDate(dailyLogDto.getLogDate())
-                .waterIntake(dailyLogDto.getWaterIntake())
-                .caloriesConsumed(dailyLogDto.getCaloriesConsumed())
-                .proteinConsumed(dailyLogDto.getProteinConsumed())
-                .carbsConsumed(dailyLogDto.getCarbsConsumed())
-                .fatsConsumed(dailyLogDto.getFatsConsumed())
-                .createdOn(dailyLogDto.getCreatedOn())
-                .updatedOn(dailyLogDto.getUpdatedOn())
-                .user(dailyLogDto.getUser())
                 .build();
     }
 }
