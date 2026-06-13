@@ -22,6 +22,10 @@ public class DailyLogDto {
     private Integer caloriesConsumed;
     private Integer caloriesBurned;
     private Integer targetCalories;
+    private Integer caloriesProgress;
+    private Integer targetProtein;
+    private Integer targetCarbs;
+    private Integer targetFats;
     private Double proteinConsumed;
     private Double carbsConsumed;
     private Double fatsConsumed;
