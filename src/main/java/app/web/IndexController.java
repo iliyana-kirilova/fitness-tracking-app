@@ -89,7 +89,7 @@ public class IndexController {
 
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("user", user);
-        modelAndView.addObject("logs", dailyLogService.getAllLogs());
+        modelAndView.addObject("logs", dailyLogService.getAllLogs(userUUID.toString()));
         modelAndView.addObject("todayLog", dailyLogService.getTodayLog(userUUID.toString()));
 
         return modelAndView;
