@@ -93,6 +93,13 @@ public class UserService {
         return UserMapper.toUserDto(updatedUser);
     }
 
+    public List<UserDto> getAllUsers(){
+        return userRepository.findAll()
+                            .stream()
+                            .map(UserMapper::toUserDto)
+                            .toList();
+    }
+
 
 }
 
