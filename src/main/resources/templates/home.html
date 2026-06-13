@@ -12,6 +12,9 @@
 <nav class="nav-logged">
     <div class="nav-brand">NUTRIPULSE.</div>
     <div class="nav-links">
+        <a th:if="${user.role.name() == 'ADMIN'}"
+           th:href="@{/admin/logs}"
+           class="link-item">Admin Panel</a>
         <a th:href="@{/users/{id}/profile(id=${user.getId()})}" class="link-item">My Profile Settings</a>
         <a th:href="@{/logout}" class="btn-logout">Logout</a>
     </div>

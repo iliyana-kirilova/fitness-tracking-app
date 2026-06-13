@@ -12,6 +12,7 @@
 <nav class="nav-logged">
     <div class="nav-brand">NUTRIPULSE.</div>
     <div class="nav-links">
+        <a th:href="@{/home}" class="link-item">Home</a>
         <a th:href="@{/users/{id}/profile(id=${user.getId()})}" class="link-item">My Profile Settings</a>
         <a th:href="@{/logout}" class="btn-logout">Logout</a>
     </div>
@@ -21,8 +22,11 @@
 
     <div class="welcome-section">
         <div class="welcome-header">
-            <h1>Welcome back, <span class="text-highlight">Legend</span>!</h1>
-            <h2>Are you ready to outwork yesterday?</h2>
+            <h1 class="welcome-title">
+                Ready to crush your goals,
+                <span class="text-highlight" th:text="${user.username}">UserName</span>.
+            </h1>
+            <p class="welcome-subtitle">Track it. Fuel it. Improve it.</p>
         </div>
     </div>
 
