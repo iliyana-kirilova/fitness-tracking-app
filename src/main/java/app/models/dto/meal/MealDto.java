@@ -21,4 +21,5 @@ public class MealDto {
     private Double protein;
     private Double carbs;
     private Double fats;
+    private UUID dailyLogId;
 }

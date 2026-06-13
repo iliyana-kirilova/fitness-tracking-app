@@ -15,4 +15,5 @@ public class WorkoutDto {
     private WorkoutType type;
     private Integer duration;
     private Integer caloriesBurned;
+    private UUID dailyLogId;
 }

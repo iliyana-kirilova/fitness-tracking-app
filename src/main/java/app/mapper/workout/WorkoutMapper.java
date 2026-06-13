@@ -17,6 +17,7 @@ public class WorkoutMapper {
                 .type(workout.getType())
                 .duration(workout.getDuration())
                 .caloriesBurned(workout.getCaloriesBurned())
+                .dailyLogId(workout.getDailyLog().getId())
                 .build();
     }
 }

@@ -19,6 +19,7 @@ public class MealMapper {
                         .protein(meal.getProtein())
                         .carbs(meal.getCarbs())
                         .fats(meal.getFats())
+                        .dailyLogId(meal.getDailyLog().getId())
                         .build();
         }
 }
