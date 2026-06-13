@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriPulse - Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/admin-logs.css">
+</head>
+<body>
+<nav class="nav-logged">
+    <div class="nav-brand">NUTRIPULSE.</div>
+    <div class="nav-links">
+        <a th:href="@{/home}" class="link-item">Home</a>
+        <a th:href="@{/logout}" class="btn-logout">Logout</a>
+    </div>
+</nav>
+
+<main class="admin-container">
+    <h1 class="admin-title">All Users Daily Logs</h1>
+
+    <div class="logs-list">
+        <p th:if="${#lists.isEmpty(logs)}" class="no-logs">No daily logs found in the system.</p>
+
+        <div th:each="log : ${logs}" class="card">
+
+            <div class="main-stats-row">
+                <div class="stat-block">
+                    <span class="stat-label">Log ID</span>
+                    <span class="stat-value id-style log-id" th:text="${log.id}">101</span>
+                </div>
+
+                <div class="stat-block">
+                    <span class="stat-label">User ID</span>
+                    <span class="stat-value id-style" th:text="${log.userId}">UUID-12345</span>
+                </div>
+
+                <div class="stat-block">
+                    <span class="stat-label">Date</span>
+                    <span class="stat-value" th:text="${log.logDate}">2026-03-31</span>
+                </div>
+
+                <div class="stat-block">
+                    <span class="stat-label">Calories</span>
+                    <span class="stat-value color-eaten" th:text="${log.caloriesConsumed} + ' kcal'">0 kcal</span>
+                </div>
+
+                <div class="stat-block">
+                    <span class="stat-label">Water</span>
+                    <span class="stat-value color-water" th:text="${log.waterIntake} + ' ml'">0 ml</span>
+                </div>
+
+                <div class="stat-block">
+                    <span class="stat-label">Protein</span>
+                    <span class="stat-value color-protein" th:text="${log.proteinConsumed} + 'g'">0g</span>
+                </div>
+
+                <div class="stat-block">
+                    <span class="stat-label">Carbs</span>
+                    <span class="stat-value color-carbs" th:text="${log.carbsConsumed} + 'g'">0g</span>
+                </div>
+
+                <div class="stat-block">
+                    <span class="stat-label">Fats</span>
+                    <span class="stat-value color-fats" th:text="${log.fatsConsumed} + 'g'">0g</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
