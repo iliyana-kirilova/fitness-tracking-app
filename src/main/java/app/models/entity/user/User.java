@@ -25,6 +25,7 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String username;
+    @Column(columnDefinition = "TEXT")
     private String profilePicture;
 
     @Column(nullable = false, unique = true)

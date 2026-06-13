@@ -68,8 +68,15 @@ public class DailyLogService {
     }
 
     public List<DailyLogDto> getAllLogs() {
-
         return dailyLogRepository.findAllByOrderByLogDateDesc()
+                .stream()
+                .map(DailyLogMapper::toDailyLogDto)
+                .toList();
+    }
+
+    public List<DailyLogDto> getAllLogs(String id) {
+
+        return dailyLogRepository.findAllByUserIdOrderByLogDateDesc(UUID.fromString(id))
                 .stream()
                 .map(log -> {
                     DailyLogDto dto = DailyLogMapper.toDailyLogDto(log);

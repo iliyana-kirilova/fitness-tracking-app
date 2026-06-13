@@ -33,9 +33,9 @@ public class UserProfileController {
     }
 
     @GetMapping("/biometrics")
-    public String getBiometricsForm() {
-        String userId = "da56da89-db1e-4731-80c1-2650ac93da00";
-        DailyLogDto todayLog = dailyLogService.getTodayLog(userId);
+    public String getBiometricsForm(HttpSession httpSession) {
+        UUID userId = (UUID) httpSession.getAttribute("userId");
+        DailyLogDto todayLog = dailyLogService.getTodayLog(userId.toString());
 
         if (todayLog != null) {
             return "redirect:/daily-log/" + todayLog.getId();
@@ -48,7 +48,7 @@ public class UserProfileController {
     public String saveBiometrics(@Valid @ModelAttribute ("profileRequest") UserProfileRequestDto profileRequest,
                                  BindingResult bindingResult,
                                  HttpSession httpSession) {
-        UUID userId = (UUID) httpSession.getAttribute("user_id");
+        UUID userId = (UUID) httpSession.getAttribute("userId");
 
         if (bindingResult.hasErrors()) {
             DailyLogDto todayLog = dailyLogService.getTodayLog(userId.toString());
