@@ -4,13 +4,13 @@ import app.models.dto.dailyLog.DailyLogDto;
 import app.models.dto.dailyLog.WaterIntakeRequestDto;
 import app.models.dto.user.UserDto;
 import app.models.dto.userProfile.UserProfileRequestDto;
-import app.models.entity.user.User;
 import app.models.entity.userProfile.ActivityLevel;
 import app.models.entity.userProfile.FitnessGoal;
 import app.models.entity.userProfile.Gender;
-import app.repository.user.UserRepository;
 import app.service.dailyLog.DailyLogService;
+import app.service.user.UserService;
 import app.service.userProfile.UserProfileService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -25,35 +25,37 @@ public class DailyLogController {
 
     private final DailyLogService dailyLogService;
     private final UserProfileService userProfileService;
+    private final UserService  userService;
 
-    public DailyLogController(DailyLogService dailyLogService, UserProfileService userProfileService) {
+    public DailyLogController(DailyLogService dailyLogService, UserProfileService userProfileService, UserService userService) {
         this.dailyLogService = dailyLogService;
         this.userProfileService = userProfileService;
+        this.userService = userService;
     }
 
     @GetMapping("/create")
-    public String createLog() {
-        String userId = "da56da89-db1e-4731-80c1-2650ac93da00";
-        dailyLogService.createEmptyLog(userId);
+    public String createLog(HttpSession httpSession) {
+        UUID userId = (UUID)  httpSession.getAttribute("userId");
+        dailyLogService.createEmptyLog(userId.toString());
 
         return "redirect:/home";
     }
 
 
     @GetMapping("/{id}")
-    public ModelAndView openLog(@PathVariable String id) {
-
+    public ModelAndView openLog(@PathVariable String id, HttpSession httpSession) {
+        UUID userId = (UUID)  httpSession.getAttribute("userId");
+        UserDto user = userService.getById(userId);
         DailyLogDto dailyLog =
                 dailyLogService.getLogById(id);
 
-        String userId = "da56da89-db1e-4731-80c1-2650ac93da00";
-
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("dashboard");
+        modelAndView.addObject("user", user);
         modelAndView.addObject("dailyLog", dailyLog);
         modelAndView.addObject("waterRequest", WaterIntakeRequestDto.builder().build());
         modelAndView.addObject("profileRequest", UserProfileRequestDto.builder().build());
-        modelAndView.addObject("profile", userProfileService.getByUserId(userId));
+        modelAndView.addObject("profile", userProfileService.getByUserId(userId.toString()));
         modelAndView.addObject("goals", FitnessGoal.values());
         modelAndView.addObject("activityLevels", ActivityLevel.values());
         modelAndView.addObject("genders", Gender.values());

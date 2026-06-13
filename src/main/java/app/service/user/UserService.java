@@ -71,8 +71,8 @@ public class UserService {
                 .toList();
     }
 
-    public UserDto getById(String id) {
-        User user = userRepository.findById(UUID.fromString(id))
+    public UserDto getById(UUID id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User with id [%s] does not exist.".formatted(id)));
         return UserMapper.toUserDto(user);
     }

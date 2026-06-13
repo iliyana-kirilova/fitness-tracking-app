@@ -4,9 +4,9 @@ import app.models.dto.user.UserDto;
 import app.models.dto.user.UserLoginRequest;
 import app.models.dto.user.UserRegisterRequest;
 import app.models.entity.user.Country;
-import app.models.entity.user.User;
 import app.service.dailyLog.DailyLogService;
 import app.service.user.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.UUID;
 
 @Controller
 public class IndexController {
@@ -42,7 +44,8 @@ public class IndexController {
 
     @PostMapping("/login")
     public ModelAndView login(@Valid @ModelAttribute UserLoginRequest userLoginRequest,
-                             BindingResult bindingResult) {
+                              BindingResult bindingResult,
+                              HttpSession httpSession) {
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("login");
@@ -50,11 +53,8 @@ public class IndexController {
         }
 
         UserDto user = userService.login(userLoginRequest);
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home");
-        modelAndView.addObject("user", user);
-        return modelAndView;
+        httpSession.setAttribute("userId", user.getId());
+        return new ModelAndView("redirect:/home");
     }
 
     @GetMapping("/register")
@@ -82,20 +82,23 @@ public class IndexController {
     }
 
     @GetMapping("/home")
-    public ModelAndView getHomePage() {
-        //this method is for testing purposes only, to be removed in the future
-        //it returns the home page with a hardcoded user, to be used for testing the home page and its features without the need to login first
-        String userId = "da56da89-db1e-4731-80c1-2650ac93da00";
-
-        UserDto user = userService.getById(userId);
+    public ModelAndView getHomePage(HttpSession httpSession) {
+        UUID userUUID = (UUID) httpSession.getAttribute("userId");
+        UserDto user = userService.getById(userUUID);
 
 
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("user", user);
         modelAndView.addObject("logs", dailyLogService.getAllLogs());
-        modelAndView.addObject("todayLog", dailyLogService.getTodayLog(userId));
+        modelAndView.addObject("todayLog", dailyLogService.getTodayLog(userUUID.toString()));
 
         return modelAndView;
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession httpSession) {
+        httpSession.invalidate();
+        return "redirect:/";
     }
 
 }
