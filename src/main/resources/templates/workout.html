@@ -12,8 +12,8 @@
 <nav class="nav-logged">
     <div class="nav-brand">NUTRIPULSE.</div>
     <div class="nav-links">
-        <a href="/profile/edit" class="link-item">My Profile Settings</a>
-        <a href="/users/logout" class="btn-logout">Logout</a>
+        <a th:href="@{/users/{id}/profile(id=${user.getId()})}"  class="link-item">My Profile Settings</a>
+        <a th:href="@{/logout}" class="btn-logout">Logout</a>
     </div>
 </nav>
 
@@ -28,8 +28,8 @@
               th:object="${workoutRequest}">
             <div class="form-group">
                 <label for="type">Workout Type</label>
-                <select id="type"  th:field="*{type}" name="type" class="form-control" required>
-                    <option value="" disabled>Select type...</option>
+                <select id="type"  th:field="*{type}" name="type" class="form-control">
+                    <option th:value="${null}">Select type...</option>
                     <option th:each="t : ${workoutTypes}"
                             th:value="${t}"
                             th:text="${t}">
@@ -40,14 +40,14 @@
 
             <div class="form-group">
                 <label for="duration">Duration (minutes)</label>
-                <input th:field="*{duration}" type="number" id="duration" name="duration" class="form-control" placeholder="e.g., 45" min="1" required>
+                <input th:field="*{duration}" type="number" id="duration" name="duration" class="form-control" placeholder="e.g., 45" min="1">
                 <p class="error-msg" th:if="${#fields.hasErrors('duration')}"
                       th:errors="*{duration}"></p>
             </div>
 
             <div class="form-group">
                 <label for="caloriesBurned">Calories Burned (kcal)</label>
-                <input  th:field="*{caloriesBurned}" type="number" id="caloriesBurned" name="caloriesBurned" class="form-control" placeholder="e.g., 350" min="0" required>
+                <input  th:field="*{caloriesBurned}" type="number" id="caloriesBurned" name="caloriesBurned" class="form-control" placeholder="e.g., 350" min="0">
                 <p class="error-msg" th:if="${#fields.hasErrors('caloriesBurned')}" th:errors="*{caloriesBurned}"></p>
             </div>
 

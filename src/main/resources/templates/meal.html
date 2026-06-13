@@ -12,8 +12,8 @@
 <nav class="nav-logged">
     <div class="nav-brand">NUTRIPULSE.</div>
     <div class="nav-links">
-        <a href="/profile/edit" class="link-item">My Profile Settings</a>
-        <a href="/users/logout" class="btn-logout">Logout</a>
+        <a th:href="@{/users/{id}/profile(id=${user.getId()})}"  class="link-item">My Profile Settings</a>
+        <a th:href="@{/logout}" class="btn-logout">Logout</a>
     </div>
 </nav>
 
@@ -31,13 +31,14 @@
 
             <div class="form-group">
                 <label for="name">Meal Name</label>
-                <input th:field="*{name}"  type="text" id="name" name="name" class="form-control" placeholder="e.g., Grilled Chicken Rice" required>
+                <input th:field="*{name}"  type="text" id="name" name="name" class="form-control" placeholder="e.g., Grilled Chicken Rice">
+                <p class="error-msg" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
             </div>
 
             <div class="form-group">
                 <label for="type">Meal Type</label>
-                <select th:field="*{type}"  id="type" name="type" class="form-control" required>
-                    <option value="" disabled>Select type...</option>
+                <select th:field="*{type}"  id="type" name="type" class="form-control">
+                    <option th:value="${null}">Select type...</option>
                     <option th:each="t : ${mealTypes}"
                             th:value="${t}"
                             th:text="${t}">
@@ -48,27 +49,27 @@
 
             <div class="form-group">
                 <label for="calories">Calories (kcal)</label>
-                <input th:field="*{calories}" type="number" id="calories" name="calories" class="form-control" placeholder="e.g., 550" min="0" required>
+                <input th:field="*{calories}" type="number" id="calories" name="calories" class="form-control" placeholder="e.g., 550" min="0">
                 <p class="error-msg" th:if="${#fields.hasErrors('calories')}" th:errors="*{calories}"></p>
             </div>
 
             <div class="macro-grid">
                 <div class="form-group">
                     <label for="protein">Protein (g)</label>
-                    <input  th:field="*{protein}" type="number" id="protein" name="protein" class="form-control" placeholder="0.0" min="0" step="0.1" required>
+                    <input  th:field="*{protein}" type="number" id="protein" name="protein" class="form-control" placeholder="0.0" min="0" step="0.1">
                     <p class="error-msg" th:if="${#fields.hasErrors('protein')}" th:errors="*{protein}"></p>
                 </div>
 
                 <div class="form-group">
                     <label for="carbs">Carbs (g)</label>
-                    <input th:field="*{carbs}" type="number" id="carbs" name="carbs" class="form-control" placeholder="0.0" min="0" step="0.1" required>
+                    <input th:field="*{carbs}" type="number" id="carbs" name="carbs" class="form-control" placeholder="0.0" min="0" step="0.1">
                     <p class="error-msg" th:if="${#fields.hasErrors('carbs')}" th:errors="*{carbs}"></p>
 
                 </div>
 
                 <div class="form-group">
                     <label for="fats">Fats (g)</label>
-                    <input th:field="*{fats}" type="number" id="fats" name="fats" class="form-control" placeholder="0.0" min="0" step="0.1" required>
+                    <input th:field="*{fats}" type="number" id="fats" name="fats" class="form-control" placeholder="0.0" min="0" step="0.1">
                     <p class="error-msg" th:if="${#fields.hasErrors('fats')}" th:errors="*{fats}"></p>
                 </div>
             </div>
