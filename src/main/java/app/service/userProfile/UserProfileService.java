@@ -63,10 +63,6 @@ public class UserProfileService {
 
     }
 
-    public boolean hasProfile(String userId){
-        return userProfileRepository.findByUserId(UUID.fromString(userId)).isPresent();
-    }
-
     public boolean isProfileComplete(UserProfile profile) {
         return profile.getWeight() != null
                 && profile.getHeight() != null

@@ -1,5 +1,6 @@
 package app.service.user;
 
+import app.exception.UserNotFoundException;
 import app.mapper.user.UserMapper;
 import app.models.dto.user.UserDto;
 import app.models.dto.user.UserEditDto;
@@ -73,7 +74,7 @@ public class UserService {
 
     public UserDto getById(UUID id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User with id [%s] does not exist.".formatted(id)));
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         return UserMapper.toUserDto(user);
     }
 
@@ -92,14 +93,6 @@ public class UserService {
 
         return UserMapper.toUserDto(updatedUser);
     }
-
-    public List<UserDto> getAllUsers(){
-        return userRepository.findAll()
-                            .stream()
-                            .map(UserMapper::toUserDto)
-                            .toList();
-    }
-
 
 }
 
