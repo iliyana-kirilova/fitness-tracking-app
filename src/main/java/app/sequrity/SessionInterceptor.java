@@ -1,7 +1,6 @@
 package app.sequrity;
 
 import app.models.dto.user.UserDto;
-import app.models.entity.user.UserRole;
 import app.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

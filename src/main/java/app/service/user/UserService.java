@@ -10,6 +10,9 @@ import app.models.entity.user.User;
 import app.repository.user.UserRepository;
 import app.service.userProfile.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserProfileService userProfileService;
@@ -30,7 +33,7 @@ public class UserService {
         this.userProfileService = userProfileService;
     }
 
-    public UserDto login(UserLoginRequest userLoginRequest) {
+   /* public UserDto login(UserLoginRequest userLoginRequest) {
         Optional<User> optionalUser = userRepository.findByUsername(userLoginRequest.getUsername());
 
         if (optionalUser.isEmpty() ||
@@ -39,7 +42,7 @@ public class UserService {
         }
 
         return UserMapper.toUserDto(optionalUser.get());
-    }
+    }*/
 
     public UserDto register(UserRegisterRequest userRegisterRequest) {
 
@@ -94,5 +97,17 @@ public class UserService {
         return UserMapper.toUserDto(updatedUser);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+
+        return AuthenticationUserDetails.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .role(user.getRole())
+                .build();
+    }
 }
 

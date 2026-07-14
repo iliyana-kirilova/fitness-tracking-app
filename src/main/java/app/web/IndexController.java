@@ -5,9 +5,12 @@ import app.models.dto.user.UserLoginRequest;
 import app.models.dto.user.UserRegisterRequest;
 import app.models.entity.user.Country;
 import app.service.dailyLog.DailyLogService;
+import app.service.user.AuthenticationUserDetails;
 import app.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +45,7 @@ public class IndexController {
         return modelAndView;
     }
 
-    @PostMapping("/login")
+  /*  @PostMapping("/login")
     public ModelAndView login(@Valid @ModelAttribute UserLoginRequest userLoginRequest,
                               BindingResult bindingResult,
                               HttpSession httpSession) {
@@ -56,7 +59,7 @@ public class IndexController {
         httpSession.setAttribute("userId", user.getId());
         return new ModelAndView("redirect:/home");
     }
-
+*/
     @GetMapping("/register")
     public ModelAndView getRegisterPage() {
         UserRegisterRequest userRegisterRequest = UserRegisterRequest.builder().build();
@@ -82,23 +85,27 @@ public class IndexController {
     }
 
     @GetMapping("/home")
-    public ModelAndView getHomePage(HttpSession httpSession) {
-        UUID userUUID = (UUID) httpSession.getAttribute("userId");
-        UserDto user = userService.getById(userUUID);
+    public ModelAndView getHomePage(@AuthenticationPrincipal AuthenticationUserDetails principal) {
+
+      /*  AuthenticationUserDetails principal = (AuthenticationUserDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();*/
+        UserDto user = userService.getById(principal.getId());
 
 
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("user", user);
-        modelAndView.addObject("logs", dailyLogService.getAllLogs(userUUID.toString()));
-        modelAndView.addObject("todayLog", dailyLogService.getTodayLog(userUUID.toString()));
+        modelAndView.addObject("logs", dailyLogService.getAllLogs(user.getId().toString()));
+        modelAndView.addObject("todayLog", dailyLogService.getTodayLog(user.getId().toString()));
 
         return modelAndView;
     }
 
-    @GetMapping("/logout")
+    /*@GetMapping("/logout")
     public String logout(HttpSession httpSession) {
         httpSession.invalidate();
         return "redirect:/";
-    }
+    }*/
 
 }
