@@ -13,6 +13,9 @@
     <div class="nav-brand">NUTRIPULSE.</div>
     <div class="nav-links">
         <a sec:authorize="hasRole('ROLE_ADMIN')"
+           th:href="@{/admin/users}"
+           class="link-item">Manage Users</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')"
            th:href="@{/admin/logs}"
            class="link-item">Admin Panel</a>
         <a th:href="@{/users/{id}/profile(id=${user.getId()})}" class="link-item">My Profile Settings</a>
