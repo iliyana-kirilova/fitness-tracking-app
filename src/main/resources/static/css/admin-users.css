@@ -1,0 +1,329 @@
+:root {
+    --bg-color: #0F172A;
+    --card-bg: rgba(30, 41, 59, 0.45);
+    --accent-color: #CCFF00;
+    --cyan-color: #06B6D4;
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --border-color: #334155;
+
+    /* Специални цветове */
+    --admin-color: #A855F7;
+    --user-color: #3B82F6;
+    --success-color: #22C55E;
+    --danger-color: #EF4444;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    min-height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Навигация */
+.nav-logged {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #1E293B;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.nav-brand {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--accent-color);
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.link-item {
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.link-item:hover {
+    color: var(--accent-color);
+}
+
+.btn-logout {
+    background-color: #334155;
+    color: #F8FAFC;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: background-color 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: var(--danger-color);
+}
+
+/* Основен Контейнер */
+.admin-container {
+    width: 95%;
+    max-width: 1600px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+}
+
+.admin-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 60px;
+    height: 3px;
+    background-color: var(--accent-color);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(204, 255, 0, 0.4);
+}
+
+/* Таблица Контейнер */
+.table-container {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    table-layout: fixed;
+}
+
+
+.styled-table th {
+    padding: 1rem 0.5rem;
+    background-color: rgba(30, 41, 59, 0.8);
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: center;
+}
+
+
+.styled-table td {
+    padding: 1rem 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    vertical-align: middle;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.styled-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Професионално разпределение на ширините на колоните */
+.styled-table th:nth-child(1) { width: 18%; } /* User */
+.styled-table th:nth-child(2) { width: 22%; } /* Email */
+.styled-table th:nth-child(3) { width: 10%; } /* Country */
+.styled-table th:nth-child(4) { width: 10%; } /* Role */
+.styled-table th:nth-child(5) { width: 6%; }  /* Logs */
+.styled-table th:nth-child(6) { width: 10%; } /* Status */
+.styled-table th:nth-child(7) { width: 12%; } /* Created On */
+.styled-table th:nth-child(8) { width: 6%; }  /* Switch Status */
+.styled-table th:nth-child(9) { width: 6%; }  /* Switch Role */
+
+
+.user-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: auto;
+    white-space: nowrap;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.username-text {
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* --- РОЛИ --- */
+.badge {
+    display: inline-block;
+    padding: 0.35rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.badge-admin {
+    background-color: rgba(168, 85, 247, 0.12);
+    color: var(--admin-color);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+}
+
+.badge-user {
+    background-color: rgba(59, 130, 246, 0.12);
+    color: var(--user-color);
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.2);
+}
+
+/* Връзка за Logs */
+.logs-count-link {
+    text-decoration: none;
+}
+
+.logs-count {
+    background-color: rgba(204, 255, 0, 0.1);
+    color: var(--accent-color);
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 0.8rem;
+    border: 1px solid rgba(204, 255, 0, 0.2);
+    transition: background-color 0.2s;
+}
+
+.logs-count:hover {
+    background-color: var(--accent-color);
+    color: #000;
+}
+
+
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.status-indicator::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.status-indicator.active {
+    color: var(--success-color);
+    text-shadow: 0 0 8px rgba(34, 197, 94, 0.35);
+}
+
+.status-indicator.active::before {
+    background-color: var(--success-color);
+    box-shadow: 0 0 8px var(--success-color);
+}
+
+.status-indicator.inactive {
+    color: var(--danger-color);
+    text-shadow: 0 0 8px rgba(239, 68, 68, 0.35);
+}
+
+.status-indicator.inactive::before {
+    background-color: var(--danger-color);
+    box-shadow: 0 0 8px var(--danger-color);
+}
+
+
+.date-text {
+    white-space: nowrap;
+}
+
+
+.toggle-switch-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+    display: inline-block;
+}
+
+.switch-bg {
+    width: 44px;
+    height: 22px;
+    background-color: #1E293B;
+    border-radius: 50px;
+    position: relative;
+    transition: background-color 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+
+.switch-circle {
+    width: 16px;
+    height: 16px;
+    background-color: #94A3B8;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.switch-bg.active {
+    background-color: #334155;
+    border-color: #475569;
+}
+
+.switch-bg.active .switch-circle {
+    left: 23px;
+    background-color: #F8FAFC;
+}

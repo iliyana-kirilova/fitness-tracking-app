@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriPulse - Admin Users</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/admin-users.css">
+</head>
+<body>
+<nav class="nav-logged">
+    <div class="nav-brand">NUTRIPULSE.</div>
+    <div class="nav-links">
+        <a th:href="@{/home}" class="link-item">Home</a>
+        <a th:href="@{/admin/logs}" class="link-item">Daily Logs</a>
+        <a th:href="@{/logout}" class="btn-logout">Logout</a>
+    </div>
+</nav>
+
+<main class="admin-container">
+    <h1 class="admin-title">Manage Users</h1>
+
+    <div class="table-container">
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Country</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Created On</th>
+                <th>Switch Status</th>
+                <th>Switch Role</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td>
+                    <div class="user-info">
+                        <img th:if="${user.profilePicture != null and !user.profilePicture.isEmpty()}"
+                             th:src="${user.profilePicture}"
+                             alt="Avatar" class="user-avatar">
+                        <span th:text="${user.username}" class="username-text"></span>
+                    </div>
+                </td>
+                <td th:text="${user.email}"></td>
+                <td th:text = "${user.country}"></td>
+                <td>
+                    <span th:text="${user.role}"
+                          th:class="${user.role.name() == 'ADMIN'} ? 'badge badge-admin' : 'badge badge-user'" ></span>
+                </td>
+                <td>
+                    <span th:class="${user.isActive()} ? 'status-indicator active' : 'status-indicator inactive'"
+                          th:text="${user.isActive()} ? 'Active' : 'Inactive'"></span>
+                </td>
+                <td>
+                    <span th:text="${#temporals.format(user.getCreatedOn(), 'dd MMMM yyyy')}"></span>
+                </td>
+                <td>
+                    <form th:action="@{/admin/users/{id}/status(id=${user.getId()})}" th:method="PUT">
+                        <button type="submit" class="toggle-switch-btn" title="Deactivate User">
+                            <div class="switch-bg active">
+                                <div class="switch-circle"></div>
+                            </div>
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/admin/users/{id}/role(id=${user.getId()})}" th:method="PUT">
+                        <button type="submit" class="toggle-switch-btn" title="Toggle Role">
+                            <div class="switch-bg active">
+                                <div class="switch-circle"></div>
+                            </div>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
