@@ -21,7 +21,6 @@ public class UserInit implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         List<UserDto> users = userService.findAll();
-
         if (!users.isEmpty()) {
             return;
         }

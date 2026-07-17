@@ -43,6 +43,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Country country;
 
+    private boolean isActive;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
 
@@ -51,6 +52,4 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<DailyLog> dailyLogs = new ArrayList<>();
-
-
 }

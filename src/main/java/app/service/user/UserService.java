@@ -7,9 +7,11 @@ import app.models.dto.user.UserEditDto;
 import app.models.dto.user.UserLoginRequest;
 import app.models.dto.user.UserRegisterRequest;
 import app.models.entity.user.User;
+import app.models.entity.user.UserRole;
 import app.repository.user.UserRepository;
 import app.service.userProfile.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -97,6 +99,40 @@ public class UserService implements UserDetailsService {
         return UserMapper.toUserDto(updatedUser);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserMapper::toUserDto)
+                .toList();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public void switchStatus(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(
+                        () -> new RuntimeException("User with id [%s] does not exist.".formatted(id)));
+
+        user.setActive(!user.isActive());
+        userRepository.save(user);
+    }
+
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public void switchRole(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(
+                        () -> new RuntimeException("User with id [%s] does not exist.".formatted(id))
+                );
+
+        if(user.getRole()== UserRole.USER) {
+            user.setRole(UserRole.ADMIN);
+        } else {
+            user.setRole(UserRole.USER);
+        }
+        userRepository.save(user);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
@@ -108,6 +144,10 @@ public class UserService implements UserDetailsService {
                 .password(user.getPassword())
                 .role(user.getRole())
                 .build();
+    }
+
+    public boolean hasUsers() {
+        return userRepository.count() > 0;
     }
 }
 

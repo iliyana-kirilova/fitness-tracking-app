@@ -1,5 +1,7 @@
 package app.mapper.user;
 
+import app.mapper.dailyLog.DailyLogMapper;
+import app.models.dto.dailyLog.DailyLogDto;
 import app.models.dto.user.UserDto;
 import app.models.dto.user.UserRegisterRequest;
 import app.models.entity.user.User;
@@ -7,6 +9,7 @@ import app.models.entity.user.UserRole;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 public class UserMapper {
@@ -23,6 +26,7 @@ public class UserMapper {
                 .lastName(userRegisterRequest.getLastName())
                 .country(userRegisterRequest.getCountry())
                 .role(UserRole.USER)
+                .isActive(true)
                 .createdOn(LocalDateTime.now())
                 .updatedOn(LocalDateTime.now())
                 .build();
@@ -42,6 +46,7 @@ public class UserMapper {
                 .profilePicture(user.getProfilePicture())
                 .country(user.getCountry())
                 .role(user.getRole())
+                .isActive(user.isActive())
                 .createdOn(user.getCreatedOn())
                 .updatedOn(user.getUpdatedOn())
                 .build();

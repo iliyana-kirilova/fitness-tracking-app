@@ -24,6 +24,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private Country country;
+    private boolean isActive;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
     private UserProfile userProfile;
