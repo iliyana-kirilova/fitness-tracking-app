@@ -5,9 +5,11 @@ import app.models.dto.meal.MealRequestDto;
 import app.models.dto.user.UserDto;
 import app.models.entity.meal.MealType;
 import app.service.meal.MealService;
+import app.service.user.AuthenticationUserDetails;
 import app.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +30,10 @@ public class MealController {
     }
 
     @GetMapping("/add")
-    public ModelAndView getAddMealPage(@RequestParam String logId, HttpSession httpSession) {
-        UUID userId = (UUID) httpSession.getAttribute("userId");
-        UserDto user = userService.getById(userId);
+    public ModelAndView getAddMealPage(@RequestParam String logId,
+                                       @AuthenticationPrincipal AuthenticationUserDetails principal) {
+
+        UserDto user = userService.getById(principal.getId());
 
 
         ModelAndView modelAndView = new ModelAndView();

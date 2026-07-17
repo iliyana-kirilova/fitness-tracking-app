@@ -4,10 +4,12 @@ import app.models.dto.user.UserDto;
 import app.models.dto.workout.WorkoutDto;
 import app.models.dto.workout.WorkoutRequestDto;
 import app.models.entity.workout.WorkoutType;
+import app.service.user.AuthenticationUserDetails;
 import app.service.user.UserService;
 import app.service.workout.WorkoutService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +30,9 @@ public class WorkoutController {
     }
 
     @GetMapping("/add")
-    public ModelAndView getAddWorkoutForm(@RequestParam String logId, HttpSession httpSession) {
-        UUID userId = (UUID) httpSession.getAttribute("userId");
-        UserDto user = userService.getById(userId);
+    public ModelAndView getAddWorkoutForm(@RequestParam String logId,
+                                          @AuthenticationPrincipal AuthenticationUserDetails principal) {
+        UserDto user = userService.getById(principal.getId());
 
         ModelAndView modelAndView= new ModelAndView();
         modelAndView.setViewName("workout");

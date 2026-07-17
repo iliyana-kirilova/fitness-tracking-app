@@ -8,10 +8,12 @@ import app.models.entity.userProfile.ActivityLevel;
 import app.models.entity.userProfile.FitnessGoal;
 import app.models.entity.userProfile.Gender;
 import app.service.dailyLog.DailyLogService;
+import app.service.user.AuthenticationUserDetails;
 import app.service.user.UserService;
 import app.service.userProfile.UserProfileService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -34,18 +36,17 @@ public class DailyLogController {
     }
 
     @GetMapping("/create")
-    public String createLog(HttpSession httpSession) {
-        UUID userId = (UUID)  httpSession.getAttribute("userId");
-        dailyLogService.createEmptyLog(userId.toString());
+    public String createLog(@AuthenticationPrincipal AuthenticationUserDetails principal) {
+        dailyLogService.createEmptyLog(principal.getId().toString());
 
         return "redirect:/home";
     }
 
 
     @GetMapping("/{id}")
-    public ModelAndView openLog(@PathVariable String id, HttpSession httpSession) {
-        UUID userId = (UUID)  httpSession.getAttribute("userId");
-        UserDto user = userService.getById(userId);
+    public ModelAndView openLog(@PathVariable String id,
+                                @AuthenticationPrincipal AuthenticationUserDetails principal) {
+        UserDto user = userService.getById(principal.getId());
         DailyLogDto dailyLog =
                 dailyLogService.getLogById(id);
 
@@ -55,7 +56,7 @@ public class DailyLogController {
         modelAndView.addObject("dailyLog", dailyLog);
         modelAndView.addObject("waterRequest", WaterIntakeRequestDto.builder().build());
         modelAndView.addObject("profileRequest", UserProfileRequestDto.builder().build());
-        modelAndView.addObject("profile", userProfileService.getByUserId(userId.toString()));
+        modelAndView.addObject("profile", userProfileService.getByUserId(principal.getId().toString()));
         modelAndView.addObject("goals", FitnessGoal.values());
         modelAndView.addObject("activityLevels", ActivityLevel.values());
         modelAndView.addObject("genders", Gender.values());

@@ -7,9 +7,11 @@ import app.models.entity.userProfile.FitnessGoal;
 import app.models.entity.userProfile.Gender;
 import app.service.CaloriesCalculatorService;
 import app.service.dailyLog.DailyLogService;
+import app.service.user.AuthenticationUserDetails;
 import app.service.userProfile.UserProfileService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,9 +35,8 @@ public class UserProfileController {
     }
 
     @GetMapping("/biometrics")
-    public String getBiometricsForm(HttpSession httpSession) {
-        UUID userId = (UUID) httpSession.getAttribute("userId");
-        DailyLogDto todayLog = dailyLogService.getTodayLog(userId.toString());
+    public String getBiometricsForm(@AuthenticationPrincipal AuthenticationUserDetails principal) {
+        DailyLogDto todayLog = dailyLogService.getTodayLog(principal.getId().toString());
 
         if (todayLog != null) {
             return "redirect:/daily-log/" + todayLog.getId();
@@ -47,20 +48,20 @@ public class UserProfileController {
     @PostMapping("/biometrics/save")
     public String saveBiometrics(@Valid @ModelAttribute ("profileRequest") UserProfileRequestDto profileRequest,
                                  BindingResult bindingResult,
-                                 HttpSession httpSession) {
-        UUID userId = (UUID) httpSession.getAttribute("userId");
+                                 @AuthenticationPrincipal AuthenticationUserDetails principal) {
+
 
         if (bindingResult.hasErrors()) {
-            DailyLogDto todayLog = dailyLogService.getTodayLog(userId.toString());
+            DailyLogDto todayLog = dailyLogService.getTodayLog(principal.getId().toString());
             if (todayLog != null) {
                 return "redirect:/daily-log/" + todayLog.getId();
             }
             return "redirect:/home";
         }
 
-        userProfileService.saveOrUpdateProfile(userId.toString(), profileRequest);
+        userProfileService.saveOrUpdateProfile(principal.getId().toString(), profileRequest);
 
-        DailyLogDto todayLog = dailyLogService.getTodayLog(userId.toString());
+        DailyLogDto todayLog = dailyLogService.getTodayLog(principal.getId().toString());
         if (todayLog != null) {
             return "redirect:/daily-log/" + todayLog.getId();
         }
