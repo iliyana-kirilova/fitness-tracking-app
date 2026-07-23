@@ -60,7 +60,7 @@
                 <td>
                     <form th:action="@{/admin/users/{id}/status(id=${user.getId()})}" th:method="PUT">
                         <button type="submit" class="toggle-switch-btn" title="Deactivate User">
-                            <div class="switch-bg active">
+                            <div th:class="${user.isActive()} ? 'switch-bg active' : 'switch-bg'">
                                 <div class="switch-circle"></div>
                             </div>
                         </button>
@@ -69,7 +69,7 @@
                 <td>
                     <form th:action="@{/admin/users/{id}/role(id=${user.getId()})}" th:method="PUT">
                         <button type="submit" class="toggle-switch-btn" title="Toggle Role">
-                            <div class="switch-bg active">
+                            <div th:class="${user.role.name() == 'ADMIN'} ? 'switch-bg active' : 'switch-bg'">
                                 <div class="switch-circle"></div>
                             </div>
                         </button>
