@@ -125,4 +125,12 @@ public class AnalyticsService {
             return List.of();
         }
     }
+
+    public List<AchievementType> getAllAchievementTypes() {
+        return List.of(AchievementType.values());
+    }
+
+    public List<ChallengeType> getChallengeTypes() {
+        return List.of(ChallengeType.values());
+    }
 }
