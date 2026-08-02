@@ -16,6 +16,7 @@ public class ChallengeDto {
     private UUID id;
     private UUID userId;
     private String challengeType;
+    private String challengeDisplayName;
     private LocalDateTime startedAt;
     private LocalDateTime deadline;
     private String status;

@@ -16,6 +16,7 @@ public class AchievementDto {
     private UUID id;
     private UUID userId;
     private String achievementType;
+    private String achievementDisplayName;
     private LocalDateTime unlockedAt;
     private String status;
 }
