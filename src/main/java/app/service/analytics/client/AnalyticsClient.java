@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "analytics-svc", url = "${analytics.service.url}")
+@FeignClient(name = "analytics-svc",
+            url = "${analytics.service.url}",
+            configuration = FeignClient.class)
 public interface AnalyticsClient {
     @PostMapping("/achievements/check")
     ResponseEntity<List<AchievementDto>> checkAchievements(@RequestBody AchievementCheckRequest request);
