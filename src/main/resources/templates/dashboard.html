@@ -12,6 +12,7 @@
 <nav class="nav-logged">
     <div class="nav-brand">NUTRIPULSE.</div>
     <div class="nav-links">
+        <a th:href="@{/analytics}" class="link-item nav-active">Analytics</a>
         <a th:href="@{/home}" class="link-item">Home</a>
         <a th:href="@{/users/{id}/profile(id=${user.getId()})}" class="link-item">My Profile Settings</a>
         <a th:href="@{/logout}" class="btn-logout">Logout</a>

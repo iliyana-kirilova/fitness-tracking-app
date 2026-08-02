@@ -18,6 +18,10 @@
         <a sec:authorize="hasRole('ROLE_ADMIN')"
            th:href="@{/admin/logs}"
            class="link-item">Admin Panel</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')"
+           th:href="@{/admin/analytics}"
+           class="link-item">Admin Analytics</a>
+        <a th:href="@{/analytics}" class="link-item nav-active">Analytics</a>
         <a th:href="@{/users/{id}/profile(id=${user.getId()})}" class="link-item">My Profile Settings</a>
         <a th:href="@{/logout}" class="btn-logout">Logout</a>
     </div>
