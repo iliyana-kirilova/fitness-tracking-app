@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @FeignClient(name = "analytics-svc",
-            url = "${analytics.service.url}",
-            configuration = FeignClient.class)
+            url = "${analytics.service.url}")
 public interface AnalyticsClient {
     @PostMapping("/achievements/check")
     ResponseEntity<List<AchievementDto>> checkAchievements(@RequestBody AchievementCheckRequest request);
