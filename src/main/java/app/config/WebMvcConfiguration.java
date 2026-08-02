@@ -23,6 +23,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                         .permitAll()
                         .requestMatchers("/admin/**")
                         .hasRole("ADMIN")
+                        .requestMatchers("/analytics/**").authenticated()
                         .anyRequest()
                         .authenticated()
 
