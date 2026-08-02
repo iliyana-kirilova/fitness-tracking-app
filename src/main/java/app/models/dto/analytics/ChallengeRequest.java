@@ -1,6 +1,5 @@
 package app.models.dto.analytics;
 
-import com.example.analyticssvc.model.challenge.ChallengeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +13,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ChallengeRequest {
     private UUID userId;
-    private ChallengeType challengeType;
+    private String challengeType;
 }

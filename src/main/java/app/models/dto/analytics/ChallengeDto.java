@@ -1,7 +1,5 @@
 package app.models.dto.analytics;
 
-import com.example.analyticssvc.model.challenge.ChallengeStatus;
-import com.example.analyticssvc.model.challenge.ChallengeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,9 +15,9 @@ import java.util.UUID;
 public class ChallengeDto {
     private UUID id;
     private UUID userId;
-    private ChallengeType challengeType;
+    private String challengeType;
     private LocalDateTime startedAt;
     private LocalDateTime deadline;
-    private ChallengeStatus status;
+    private String status;
     private int progressPercent;
 }

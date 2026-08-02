@@ -1,7 +1,5 @@
 package app.models.dto.analytics;
 
-import com.example.analyticssvc.model.achievment.AchievementStatus;
-import com.example.analyticssvc.model.achievment.AchievementType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +15,7 @@ import java.util.UUID;
 public class AchievementDto {
     private UUID id;
     private UUID userId;
-    private AchievementType achievementType;
+    private String achievementType;
     private LocalDateTime unlockedAt;
-    private AchievementStatus status;
+    private String status;
 }
