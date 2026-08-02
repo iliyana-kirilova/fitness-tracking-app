@@ -1,12 +1,14 @@
 package app.service.meal;
 
 import app.mapper.meal.MealMapper;
+import app.models.dto.analytics.AchievementCheckRequest;
 import app.models.dto.meal.MealDto;
 import app.models.dto.meal.MealRequestDto;
 import app.models.entity.dailyLog.DailyLog;
 import app.models.entity.meal.Meal;
 import app.repository.dailyLog.DailyLogRepository;
 import app.repository.meal.MealRepository;
+import app.service.analytics.AnalyticsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +18,12 @@ import java.util.UUID;
 public class MealService {
     private final MealRepository  mealRepository;
     private final DailyLogRepository dailyLogRepository;
+    private final AnalyticsService analyticsService;
 
-    public MealService(MealRepository mealRepository, DailyLogRepository dailyLogRepository) {
+    public MealService(MealRepository mealRepository, DailyLogRepository dailyLogRepository, AnalyticsService analyticsService1) {
         this.mealRepository = mealRepository;
         this.dailyLogRepository = dailyLogRepository;
+        this.analyticsService = analyticsService1;
     }
 
     public void addMealToLog(String logId, MealRequestDto mealRequestDto) {
@@ -38,6 +42,13 @@ public class MealService {
         mealRepository.save(meal);
 
         recalculateLogTotals(log);
+
+        analyticsService.checkAchievements(
+                AchievementCheckRequest.builder()
+                        .userId(log.getUser().getId())
+                        .eventType("MEAL_ADDED")
+                        .caloriesConsumed(log.getCaloriesConsumed())
+                        .build());
     }
 
     public MealDto getById(String id) {

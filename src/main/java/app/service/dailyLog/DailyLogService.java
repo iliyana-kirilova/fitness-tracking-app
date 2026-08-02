@@ -2,6 +2,7 @@ package app.service.dailyLog;
 
 import app.mapper.dailyLog.DailyLogMapper;
 import app.mapper.userProfile.UserProfileMapper;
+import app.models.dto.analytics.AchievementCheckRequest;
 import app.models.dto.dailyLog.DailyLogDto;
 import app.models.dto.dailyLog.WaterIntakeRequestDto;
 import app.models.dto.userProfile.UserProfileDto;
@@ -12,6 +13,7 @@ import app.repository.dailyLog.DailyLogRepository;
 import app.repository.user.UserRepository;
 import app.repository.userProfile.UserProfileRepository;
 import app.service.CaloriesCalculatorService;
+import app.service.analytics.AnalyticsService;
 import app.service.userProfile.UserProfileService;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +30,15 @@ public class DailyLogService {
     private final UserProfileRepository userProfileRepository;
     private final CaloriesCalculatorService calculatorService;
     private final UserProfileService userProfileService;
+    private final AnalyticsService analyticsService;
 
-    public DailyLogService(DailyLogRepository dailyLogRepository, UserRepository userRepository, UserProfileRepository userProfileRepository, CaloriesCalculatorService calculatorService, UserProfileService userProfileService) {
+    public DailyLogService(DailyLogRepository dailyLogRepository, UserRepository userRepository, UserProfileRepository userProfileRepository, CaloriesCalculatorService calculatorService, UserProfileService userProfileService, AnalyticsService analyticsService) {
         this.dailyLogRepository = dailyLogRepository;
         this.userRepository = userRepository;
         this.userProfileRepository = userProfileRepository;
         this.calculatorService = calculatorService;
         this.userProfileService = userProfileService;
+        this.analyticsService = analyticsService;
     }
 
     public DailyLogDto createEmptyLog(String id) {
@@ -163,6 +167,15 @@ public class DailyLogService {
 
         log.setWaterIntake(log.getWaterIntake() + waterIntakeRequestDto.getAmount());
         dailyLogRepository.save(log);
+
+        analyticsService.checkAchievements(
+                AchievementCheckRequest.builder()
+                        .userId(log.getUser().getId())
+                        .eventType("WATER_ADDED")
+                        .waterIntake(log.getWaterIntake())
+                        .targetWater(2000)
+                        .build()
+        );
     }
 
 

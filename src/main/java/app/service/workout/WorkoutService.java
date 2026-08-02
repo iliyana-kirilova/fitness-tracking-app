@@ -1,12 +1,14 @@
 package app.service.workout;
 
 import app.mapper.workout.WorkoutMapper;
+import app.models.dto.analytics.AchievementCheckRequest;
 import app.models.dto.workout.WorkoutDto;
 import app.models.dto.workout.WorkoutRequestDto;
 import app.models.entity.dailyLog.DailyLog;
 import app.models.entity.workout.Workout;
 import app.repository.dailyLog.DailyLogRepository;
 import app.repository.workout.WorkoutRepository;
+import app.service.analytics.AnalyticsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +18,13 @@ import java.util.UUID;
 public class WorkoutService {
     private final WorkoutRepository workoutRepository;
     private final DailyLogRepository dailyLogRepository;
+    private final AnalyticsService analyticsService;
 
 
-    public WorkoutService(WorkoutRepository workoutRepository, DailyLogRepository dailyLogRepository) {
+    public WorkoutService(WorkoutRepository workoutRepository, DailyLogRepository dailyLogRepository, AnalyticsService analyticsService) {
         this.workoutRepository = workoutRepository;
         this.dailyLogRepository = dailyLogRepository;
+        this.analyticsService = analyticsService;
     }
 
     public void addWorkoutToLog(String logId, WorkoutRequestDto workoutRequestDto) {
@@ -34,6 +38,21 @@ public class WorkoutService {
                 .build();
         
         workoutRepository.save(workout);
+
+        int totalBurned = workoutRepository
+                .findAllByDailyLogId(log.getId())
+                .stream()
+                .mapToInt(Workout::getCaloriesBurned)
+                .sum();
+
+        analyticsService.checkAchievements(
+                AchievementCheckRequest.builder()
+                        .userId(log.getUser().getId())
+                        .eventType("WORKOUT_ADDED")
+                        .caloriesBurned(workoutRequestDto.getCaloriesBurned())
+                        .totalCaloriesBurned(totalBurned)
+                        .build()
+        );
     }
 
     public String updateWorkout(String workoutId, WorkoutRequestDto workoutRequestDto) {
