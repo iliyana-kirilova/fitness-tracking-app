@@ -1,0 +1,499 @@
+:root {
+    --bg-color: #0F172A;
+    --card-bg: #1E293B;
+    --accent-color: #CCFF00;
+    --cyan-color: #06B6D4;
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --border-color: #334155;
+    --success-color: #22C55E;
+    --danger-color: #EF4444;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.nav-logged {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    height: 70px;
+    background-color: rgba(30, 41, 59, 0.5);
+    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-brand {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--accent-color);
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 10px rgba(204, 255, 0, 0.3);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.link-item {
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.link-item:hover,
+.link-item.nav-active {
+    color: var(--accent-color);
+}
+
+.btn-logout {
+    background-color: rgba(51, 65, 85, 0.8);
+    color: var(--text-main);
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: 1px solid var(--border-color);
+}
+
+.btn-logout:hover {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    transform: translateY(-1px);
+}
+
+/* Analytics Container */
+.analytics-container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 2rem auto;
+    flex-grow: 1;
+    padding-bottom: 3rem;
+}
+
+/* Page Header */
+.page-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.text-highlight {
+    color: var(--accent-color);
+    text-shadow: 0 0 12px rgba(204, 255, 0, 0.25);
+}
+
+.page-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+}
+
+/* Sections */
+.section {
+    margin-bottom: 3rem;
+}
+
+.section-heading {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.subsection-heading {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 1.5rem;
+}
+
+.section-hint {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: -1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Summary Grid & Cards */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+}
+
+@media (max-width: 768px) {
+    .summary-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.summary-card {
+    background-color: rgba(30, 41, 59, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+    backdrop-filter: blur(5px);
+    transition: border-color 0.3s ease, transform 0.2s ease;
+}
+
+.summary-card:hover {
+    border-color: rgba(204, 255, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+.summary-icon { font-size: 1.8rem; }
+
+.summary-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+}
+
+.summary-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.color-eaten  { color: var(--accent-color); }
+.color-cyan   { color: var(--cyan-color); }
+.color-burned { color: #FF6B6B; } /* Открояващ се цвят за изгорени калории */
+.color-accent { color: var(--accent-color); }
+
+/* Challenge Form */
+.challenge-form-card {
+    background-color: rgba(30, 41, 59, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(5px);
+}
+
+.challenge-form-row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.challenge-form-row .form-group {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.challenge-form-row label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-control {
+    background-color: #0F172A;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 0.9rem;
+    width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(204, 255, 0, 0.2);
+}
+
+.btn-start-challenge {
+    background-color: var(--accent-color);
+    color: #000;
+    border: none;
+    border-radius: 50px;
+    padding: 0.75rem 1.75rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit;
+    box-shadow: 0 4px 14px rgba(204, 255, 0, 0.2);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-start-challenge:hover {
+    background-color: #b3ff00;
+    transform: translateY(-2px);
+}
+
+/* Challenges List */
+.challenges-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.challenge-card {
+    background-color: rgba(30, 41, 59, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: border-color 0.2s;
+}
+
+.challenge-card:hover {
+    border-color: rgba(6, 182, 212, 0.5);
+}
+
+.challenge-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 220px;
+}
+
+.challenge-icon { font-size: 1.5rem; }
+
+.challenge-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.challenge-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+.challenge-deadline {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.challenge-progress {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.progress-bar-bg {
+    flex-grow: 1;
+    background-color: #0F172A;
+    height: 10px;
+    border-radius: 50px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.progress-bar-fill {
+    background: linear-gradient(90deg, var(--accent-color), var(--success-color));
+    height: 100%;
+    border-radius: 50px;
+    transition: width 0.4s ease;
+}
+
+.progress-text {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    min-width: 45px;
+    text-align: right;
+}
+
+.btn-abandon {
+    background: none;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 8px;
+    color: var(--danger-color);
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.4rem 0.8rem;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.btn-abandon:hover {
+    background-color: rgba(239, 68, 68, 0.15);
+    border-color: var(--danger-color);
+}
+
+/* Achievements Grid */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.achievement-card {
+    background-color: rgba(30, 41, 59, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: border-color 0.3s, transform 0.2s;
+}
+
+.achievement-card.unlocked {
+    border-color: rgba(204, 255, 0, 0.3);
+}
+
+.achievement-card.unlocked:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.achievement-card.locked {
+    opacity: 0.45;
+}
+
+.achievement-icon-wrapper {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.locked-icon { filter: grayscale(1); }
+
+.achievement-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex-grow: 1;
+}
+
+.achievement-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+.locked-name { color: var(--text-muted); }
+
+.achievement-date {
+    font-size: 0.75rem;
+    color: var(--accent-color);
+}
+
+.achievement-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.btn-archive {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0.25rem;
+    transition: color 0.2s;
+    flex-shrink: 0;
+}
+
+.btn-archive:hover { color: var(--danger-color); }
+
+
+.empty-state {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 2.5rem;
+    border: 1px dashed var(--border-color);
+    border-radius: 16px;
+    background-color: rgba(30, 41, 59, 0.2);
+}
+
+/*(✕ Remove) */
+.btn-table-delete {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--danger-color);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-table-delete:hover {
+    background-color: var(--danger-color);
+    color: #FFFFFF;
+    border-color: var(--danger-color);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    transform: translateY(-1px);
+}
+
+/*(✓ Complete) */
+.btn-complete {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: var(--success-color);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-complete:hover {
+    background-color: var(--success-color);
+    color: #000000;
+    border-color: var(--success-color);
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    transform: translateY(-1px);
+}

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriPulse - Analytics</title>
+    <link rel="stylesheet" href="/css/analytics.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
+          rel="stylesheet">
+</head>
+<body>
+<nav class="nav-logged">
+    <div class="nav-brand">NUTRIPULSE.</div>
+    <div class="nav-links">
+        <a th:href="@{/home}" class="link-item">Home</a>
+        <a th:href="@{/logout}" class="btn-logout">Logout</a>
+    </div>
+</nav>
+
+<main class="analytics-container">
+
+    <div class="page-header">
+        <h1 class="page-title">Your <span class="text-highlight">Analytics</span></h1>
+        <p class="page-subtitle">Track your progress and celebrate your achievements</p>
+    </div>
+
+    <!-- Weekly Summary -->
+    <section class="section">
+        <h2 class="section-heading">📊 Weekly Summary</h2>
+        <div class="summary-grid">
+            <div class="summary-card">
+                <span class="summary-icon">🔥</span>
+                <span class="summary-value color-eaten"
+                      th:text="${weeklySummary != null ?
+                          #numbers.formatDecimal(weeklySummary.avgCaloriesConsumed, 1, 0) : 0}">0</span>
+                <span class="summary-label">Avg Calories / Day</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-icon">💧</span>
+                <span class="summary-value color-cyan"
+                      th:text="${weeklySummary != null ?
+                          #numbers.formatDecimal(weeklySummary.avgWaterIntake, 1, 0) + ' ml' : '0 ml'}">0 ml</span>
+                <span class="summary-label">Avg Water / Day</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-icon">💪</span>
+                <span class="summary-value color-burned"
+                      th:text="${weeklySummary != null ?
+                          #numbers.formatDecimal(weeklySummary.avgCaloriesBurned, 1, 0) : 0}">0</span>
+                <span class="summary-label">Avg Burned / Day</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-icon">🏆</span>
+                <span class="summary-value color-accent"
+                      th:text="${weeklySummary != null ? weeklySummary.totalAchievements : 0}">0</span>
+                <span class="summary-label">Achievements This Week</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Set a Challenge -->
+    <section class="section">
+        <h2 class="section-heading">⚡ Set a Challenge</h2>
+        <p class="section-hint">Challenge yourself and track your progress</p>
+
+        <div class="challenge-form-card">
+            <form th:action="@{/analytics/challenges}" method="POST">
+                <input type="hidden" th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
+                <div class="challenge-form-row">
+                    <div class="form-group">
+                        <label>Choose a Challenge</label>
+                        <select name="challengeType" class="form-control">
+                            <option value="" disabled selected>
+                                Select a challenge...
+                            </option>
+                            <option th:each="ct : ${challengeTypes}"
+                                    th:value="${ct.name()}"
+                                    th:text="${ct.displayName}">
+                            </option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-start-challenge">
+                        ⚡ Start Challenge
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Active Challenges -->
+        <div th:if="${!#lists.isEmpty(activeChallenges)}">
+            <h3 class="subsection-heading">🎯 Active Challenges</h3>
+            <div class="challenges-list">
+                <div class="challenge-card"
+                     th:each="challenge : ${activeChallenges}">
+                    <div class="challenge-left">
+                        <span class="challenge-icon">⚡</span>
+                        <div class="challenge-info">
+                            <span class="challenge-name"
+                                  th:text="${challenge.challengeDisplayName != null ?
+                                      challenge.challengeDisplayName :
+                                      challenge.challengeType}"></span>
+                            <span class="challenge-deadline"
+                                  th:text="'Deadline: ' +
+                                      ${#temporals.format(challenge.deadline, 'dd MMM yyyy')}"></span>
+                        </div>
+                    </div>
+                    <div class="challenge-progress">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill"
+                                 th:style="'width: ' + ${challenge.progressPercent} + '%;'"></div>
+                        </div>
+                        <span class="progress-text"
+                              th:text="${challenge.progressPercent} + '%'">0%</span>
+                    </div>
+                    <form th:action="@{/analytics/challenges/{id}(id=${challenge.id})}"
+                          method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}">
+                        <button type="submit" class="btn-abandon"
+                                onclick="return confirm('Abandon this challenge?')">
+                            ✕ Abandon
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <p th:if="${#lists.isEmpty(activeChallenges)}" class="empty-state">
+            No active challenges. Start one above!
+        </p>
+    </section>
+
+    <!-- Unlocked Achievements -->
+    <section class="section">
+        <h2 class="section-heading">🏆 Unlocked Achievements</h2>
+
+        <p th:if="${#lists.isEmpty(achievements)}" class="empty-state">
+            No achievements yet. Start logging meals, workouts and water!
+        </p>
+
+        <div class="achievements-grid"
+             th:if="${!#lists.isEmpty(achievements)}">
+            <div class="achievement-card unlocked"
+                 th:each="achievement : ${achievements}">
+                <div class="achievement-icon-wrapper">
+                    <span th:switch="${achievement.achievementType}">
+                        <span th:case="'FIRST_MEAL_LOGGED'">🍽️</span>
+                        <span th:case="'FIRST_WORKOUT_LOGGED'">💪</span>
+                        <span th:case="'FIRST_LOG_CREATED'">📅</span>
+                        <span th:case="'CALORIE_GOAL_MET'">🎯</span>
+                        <span th:case="'DAILY_WATER_GOAL_MET'">💧</span>
+                        <span th:case="'WATER_STREAK_3'">💦</span>
+                        <span th:case="'HYDRATION_MASTER'">🌊</span>
+                        <span th:case="'BURNED_1000_CALORIES'">🔥</span>
+                        <span th:case="'WORKOUT_STREAK_3'">⚡</span>
+                        <span th:case="'WORKOUT_STREAK_7'">🦾</span>
+                        <span th:case="'STREAK_3_DAYS'">📈</span>
+                        <span th:case="'STREAK_7_DAYS'">⭐</span>
+                        <span th:case="'STREAK_30_DAYS'">👑</span>
+                        <span th:case="'COMPLETE_DAY'">✅</span>
+                        <span th:case="'MACRO_BALANCE_MASTER'">⚖️</span>
+                        <span th:case="*">🏅</span>
+                    </span>
+                </div>
+                <div class="achievement-info">
+                    <span class="achievement-name"
+                          th:text="${achievement.achievementDisplayName != null ?
+                              achievement.achievementDisplayName :
+                              achievement.achievementType}"></span>
+                    <span class="achievement-date"
+                          th:text="'Unlocked: ' +
+                              ${#temporals.format(achievement.unlockedAt, 'dd MMM yyyy')}"></span>
+                </div>
+                <form th:action="@{/analytics/achievements/{id}(id=${achievement.id})}"
+                      method="POST">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}">
+                    <button type="submit" class="btn-archive"
+                            title="Archive achievement">
+                        ✕
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Locked Achievements -->
+    <section class="section">
+        <h2 class="section-heading">🔒 Locked Achievements</h2>
+        <p class="section-hint">Complete challenges to unlock these</p>
+
+        <div class="achievements-grid">
+            <div class="achievement-card locked"
+                 th:each="type : ${allAchievementTypes}"
+                 th:if="${!unlockedTypes.contains(type.name())}">
+                <div class="achievement-icon-wrapper locked-icon">🔒</div>
+                <div class="achievement-info">
+                    <span class="achievement-name locked-name"
+                          th:text="${type.displayName}"></span>
+                    <span class="achievement-hint"
+                          th:text="${type.hint}"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+</body>
+</html>
