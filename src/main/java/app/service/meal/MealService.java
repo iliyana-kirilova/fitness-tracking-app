@@ -48,7 +48,20 @@ public class MealService {
                         .userId(log.getUser().getId())
                         .eventType("MEAL_ADDED")
                         .caloriesConsumed(log.getCaloriesConsumed())
+                        .completeDayFlag(isDayComplete(log))
                         .build());
+
+        analyticsService.recordDailySnapshot(log.getUser().getId(), log);
+    }
+
+    private boolean isDayComplete(DailyLog log) {
+        boolean hasMeal = log.getCaloriesConsumed() != null
+                && log.getCaloriesConsumed() > 0;
+        boolean hasWorkout = log.getWorkoutList() != null
+                && !log.getWorkoutList().isEmpty();
+        boolean hasWater = log.getWaterIntake() != null
+                && log.getWaterIntake() > 0;
+        return hasMeal && hasWorkout && hasWater;
     }
 
     public MealDto getById(String id) {

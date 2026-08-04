@@ -51,8 +51,21 @@ public class WorkoutService {
                         .eventType("WORKOUT_ADDED")
                         .caloriesBurned(workoutRequestDto.getCaloriesBurned())
                         .totalCaloriesBurned(totalBurned)
+                        .completeDayFlag(isDayComplete(log))
                         .build()
         );
+
+        analyticsService.recordDailySnapshot(log.getUser().getId(), log);
+    }
+
+    private boolean isDayComplete(DailyLog log) {
+        boolean hasMeal = log.getCaloriesConsumed() != null
+                && log.getCaloriesConsumed() > 0;
+        boolean hasWorkout = log.getWorkoutList() != null
+                && !log.getWorkoutList().isEmpty();
+        boolean hasWater = log.getWaterIntake() != null
+                && log.getWaterIntake() > 0;
+        return hasMeal && hasWorkout && hasWater;
     }
 
     public String updateWorkout(String workoutId, WorkoutRequestDto workoutRequestDto) {

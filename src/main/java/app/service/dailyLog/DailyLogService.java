@@ -174,9 +174,21 @@ public class DailyLogService {
                         .eventType("WATER_ADDED")
                         .waterIntake(log.getWaterIntake())
                         .targetWater(2000)
+                        .completeDayFlag(isDayComplete(log))
                         .build()
         );
+
+        analyticsService.recordDailySnapshot(log.getUser().getId(), log);
     }
 
+    private boolean isDayComplete(DailyLog log) {
+        boolean hasMeal = log.getCaloriesConsumed() != null
+                && log.getCaloriesConsumed() > 0;
+        boolean hasWorkout = log.getWorkoutList() != null
+                && !log.getWorkoutList().isEmpty();
+        boolean hasWater = log.getWaterIntake() != null
+                && log.getWaterIntake() > 0;
+        return hasMeal && hasWorkout && hasWater;
+    }
 
 }

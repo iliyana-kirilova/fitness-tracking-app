@@ -1,6 +1,8 @@
 package app.service.analytics;
 
 import app.models.dto.analytics.*;
+import app.models.entity.dailyLog.DailyLog;
+import app.models.entity.workout.Workout;
 import app.service.analytics.client.AnalyticsClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class AnalyticsService {
                 log.info("User [{}] unlocked {} new achievement(s)",
                         request.getUserId(), newAchievements.size());
             }
+            analyticsClient.updateChallengeProgress(request);
         } catch (Exception e) {
             log.warn("Analytics service unavailable: {}", e.getMessage());
         }
@@ -133,4 +136,35 @@ public class AnalyticsService {
     public List<ChallengeType> getChallengeTypes() {
         return List.of(ChallengeType.values());
     }
+
+    public void recordDailySnapshot(UUID userId, DailyLog dailyLog) {
+        int caloriesBurned = dailyLog.getWorkoutList() == null ? 0 :
+                dailyLog.getWorkoutList().stream()
+                        .mapToInt(Workout::getCaloriesBurned)
+                        .sum();
+
+        DailySnapshotRequest snapshot = DailySnapshotRequest.builder()
+                .userId(userId)
+                .caloriesConsumed(dailyLog.getCaloriesConsumed() != null
+                        ? dailyLog.getCaloriesConsumed() : 0)
+                .waterIntake(dailyLog.getWaterIntake() != null
+                        ? dailyLog.getWaterIntake() : 0)
+                .caloriesBurned(caloriesBurned)
+                .build();
+        try {
+            analyticsClient.recordDailySnapshot(snapshot);
+        } catch (Exception e) {
+            log.warn("Analytics snapshot failed: {}", e.getMessage());
+        }
+    }
+
+    public void deleteChallenge(UUID id) {
+        try {
+            analyticsClient.deleteChallenge(id);
+        } catch (Exception e) {
+            log.warn("Failed to delete challenge: {}", e.getMessage());
+        }
+    }
+
+
 }
