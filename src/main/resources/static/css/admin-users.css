@@ -327,3 +327,7 @@ body {
     left: 23px;
     background-color: #F8FAFC;
 }
+
+body.scrollable {
+    overflow: auto;
+}

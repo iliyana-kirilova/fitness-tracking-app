@@ -111,7 +111,7 @@
                                  th:style="'width: ' + ${challenge.progressPercent} + '%;'"></div>
                         </div>
                         <span class="progress-text"
-                              th:text="${challenge.progressPercent} + '%'">0%</span>
+                              th:text="${challenge.progressPercent} + '%'"></span>
                     </div>
                     <form th:action="@{/analytics/challenges/{id}(id=${challenge.id})}"
                           method="POST">
