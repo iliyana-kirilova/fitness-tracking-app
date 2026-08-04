@@ -46,4 +46,14 @@ public interface AnalyticsClient {
 
     @GetMapping("/challenges/all")
     ResponseEntity<List<ChallengeDto>> getAllChallenges();
+
+    @PostMapping("/weekly-summary/record")
+    ResponseEntity<Void> recordDailySnapshot(
+            @RequestBody DailySnapshotRequest request);
+
+    @DeleteMapping("/challenges/{id}/admin")
+    ResponseEntity<Void> deleteChallenge(@PathVariable("id") UUID id);
+
+    @PostMapping("/challenges/progress")
+    ResponseEntity<Void> updateChallengeProgress(@RequestBody AchievementCheckRequest request);
 }
