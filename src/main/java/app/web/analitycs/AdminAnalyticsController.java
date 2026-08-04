@@ -43,4 +43,11 @@ public class AdminAnalyticsController {
         analyticsService.completeChallenge(id);
         return "redirect:/admin/analytics";
     }
+
+    @DeleteMapping("/challenges/{id}")
+    public String deleteChallenge(@PathVariable UUID id) {
+        analyticsService.deleteChallenge(id);
+        return "redirect:/admin/analytics";
+    }
+
 }
