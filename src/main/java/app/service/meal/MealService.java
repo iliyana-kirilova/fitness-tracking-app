@@ -8,6 +8,7 @@ import app.models.entity.dailyLog.DailyLog;
 import app.models.entity.meal.Meal;
 import app.repository.dailyLog.DailyLogRepository;
 import app.repository.meal.MealRepository;
+import app.service.StreakCalculatorService;
 import app.service.analytics.AnalyticsService;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,13 @@ public class MealService {
     private final MealRepository  mealRepository;
     private final DailyLogRepository dailyLogRepository;
     private final AnalyticsService analyticsService;
+    private final StreakCalculatorService streakCalculatorService;
 
-    public MealService(MealRepository mealRepository, DailyLogRepository dailyLogRepository, AnalyticsService analyticsService1) {
+    public MealService(MealRepository mealRepository, DailyLogRepository dailyLogRepository, AnalyticsService analyticsService1, StreakCalculatorService streakCalculatorService) {
         this.mealRepository = mealRepository;
         this.dailyLogRepository = dailyLogRepository;
         this.analyticsService = analyticsService1;
+        this.streakCalculatorService = streakCalculatorService;
     }
 
     public void addMealToLog(String logId, MealRequestDto mealRequestDto) {
@@ -43,11 +46,15 @@ public class MealService {
 
         recalculateLogTotals(log);
 
+        int streak = streakCalculatorService
+                .calculateConsecutiveDays(log.getUser().getId());
+
         analyticsService.checkAchievements(
                 AchievementCheckRequest.builder()
                         .userId(log.getUser().getId())
                         .eventType("MEAL_ADDED")
                         .caloriesConsumed(log.getCaloriesConsumed())
+                        .consecutiveDays(streak)
                         .completeDayFlag(isDayComplete(log))
                         .build());
 

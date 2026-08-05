@@ -8,9 +8,12 @@ import app.models.entity.dailyLog.DailyLog;
 import app.models.entity.workout.Workout;
 import app.repository.dailyLog.DailyLogRepository;
 import app.repository.workout.WorkoutRepository;
+import app.service.StreakCalculatorService;
 import app.service.analytics.AnalyticsService;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,12 +22,14 @@ public class WorkoutService {
     private final WorkoutRepository workoutRepository;
     private final DailyLogRepository dailyLogRepository;
     private final AnalyticsService analyticsService;
+    private final StreakCalculatorService streakCalculatorService;
 
 
-    public WorkoutService(WorkoutRepository workoutRepository, DailyLogRepository dailyLogRepository, AnalyticsService analyticsService) {
+    public WorkoutService(WorkoutRepository workoutRepository, DailyLogRepository dailyLogRepository, AnalyticsService analyticsService, StreakCalculatorService streakCalculatorService) {
         this.workoutRepository = workoutRepository;
         this.dailyLogRepository = dailyLogRepository;
         this.analyticsService = analyticsService;
+        this.streakCalculatorService = streakCalculatorService;
     }
 
     public void addWorkoutToLog(String logId, WorkoutRequestDto workoutRequestDto) {
@@ -45,12 +50,19 @@ public class WorkoutService {
                 .mapToInt(Workout::getCaloriesBurned)
                 .sum();
 
+        int streak = streakCalculatorService
+                .calculateConsecutiveDays(log.getUser().getId());
+        int workoutsThisWeek = streakCalculatorService.
+                countWorkoutsThisWeek(log.getUser().getId());
+
         analyticsService.checkAchievements(
                 AchievementCheckRequest.builder()
                         .userId(log.getUser().getId())
                         .eventType("WORKOUT_ADDED")
                         .caloriesBurned(workoutRequestDto.getCaloriesBurned())
                         .totalCaloriesBurned(totalBurned)
+                        .workoutStreakDays(workoutsThisWeek)
+                        .consecutiveDays(streak)
                         .completeDayFlag(isDayComplete(log))
                         .build()
         );

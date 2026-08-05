@@ -13,6 +13,7 @@ import app.repository.dailyLog.DailyLogRepository;
 import app.repository.user.UserRepository;
 import app.repository.userProfile.UserProfileRepository;
 import app.service.CaloriesCalculatorService;
+import app.service.StreakCalculatorService;
 import app.service.analytics.AnalyticsService;
 import app.service.userProfile.UserProfileService;
 import org.springframework.stereotype.Service;
@@ -31,14 +32,16 @@ public class DailyLogService {
     private final CaloriesCalculatorService calculatorService;
     private final UserProfileService userProfileService;
     private final AnalyticsService analyticsService;
+    private final StreakCalculatorService streakCalculatorService;
 
-    public DailyLogService(DailyLogRepository dailyLogRepository, UserRepository userRepository, UserProfileRepository userProfileRepository, CaloriesCalculatorService calculatorService, UserProfileService userProfileService, AnalyticsService analyticsService) {
+    public DailyLogService(DailyLogRepository dailyLogRepository, UserRepository userRepository, UserProfileRepository userProfileRepository, CaloriesCalculatorService calculatorService, UserProfileService userProfileService, AnalyticsService analyticsService, StreakCalculatorService streakCalculatorService) {
         this.dailyLogRepository = dailyLogRepository;
         this.userRepository = userRepository;
         this.userProfileRepository = userProfileRepository;
         this.calculatorService = calculatorService;
         this.userProfileService = userProfileService;
         this.analyticsService = analyticsService;
+        this.streakCalculatorService = streakCalculatorService;
     }
 
     public DailyLogDto createEmptyLog(String id) {
@@ -168,12 +171,19 @@ public class DailyLogService {
         log.setWaterIntake(log.getWaterIntake() + waterIntakeRequestDto.getAmount());
         dailyLogRepository.save(log);
 
+        int streak = streakCalculatorService
+                .calculateConsecutiveDays(log.getUser().getId());
+
+        int waterStreak = log.getWaterIntake() >= 2000 ? streak : 0;
+
         analyticsService.checkAchievements(
                 AchievementCheckRequest.builder()
                         .userId(log.getUser().getId())
                         .eventType("WATER_ADDED")
                         .waterIntake(log.getWaterIntake())
                         .targetWater(2000)
+                        .consecutiveDays(streak)
+                        .waterStreakDays(waterStreak)
                         .completeDayFlag(isDayComplete(log))
                         .build()
         );
@@ -190,5 +200,4 @@ public class DailyLogService {
                 && log.getWaterIntake() > 0;
         return hasMeal && hasWorkout && hasWater;
     }
-
 }
